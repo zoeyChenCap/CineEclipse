@@ -1,0 +1,261 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding:0 auto;
+    background-color: #f4f4f4;
+}
+
+form {
+    display: inline-block;
+    text-align: left;
+    background: #f9f9f9;
+    padding: 50px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2980b9;
+}
+
+.error{
+    color:red;
+}
+.success{
+    color:green;
+}
+
+/*
+// Style the table of manage_users(last version)
+table {
+  width: 90%;
+  margin: 1.5rem auto;
+  padding: 8px;
+  border:1px solid black;
+  border-radius: 8px; 
+  overflow: hidden; 
+  text-align: center;
+}
+#users_list h2 {
+    margin:25px auto 10px;
+    width:200px;
+}
+#users_nav{
+    margin:0 auto;
+    gap:40px;
+    width:300px;
+}*/
+
+/* General header styles */
+header {
+    background-color: #3e2723; 
+    color: #bd9f89; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 25px;
+    font-family: 'Georgia', serif; /* Classic serif for a vintage look */
+}
+
+/* Logo styling */
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Navigation styling */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Welcome text styling */
+.welcome-text {
+    font-size: 16px;
+    font-style: italic;
+    color: #943c3c;
+}
+
+a{
+    color: #93603a;
+    text-decoration: none;
+}
+
+/* Styling the main part of index page */
+.movies_container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+/* 电影标题 */
+.movies_container h2 {
+    font-size: 24px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 20px;
+}
+
+/* 电影卡片网格布局 */
+.movies_container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* 单个电影卡片 */
+.movie_card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+/* 卡片 hover 效果 */
+.movie_card:hover {
+    transform: translateY(-5px);
+}
+
+/* 电影标题 */
+.movie_card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+/* Movie Information */
+.movie_info {
+    display: flex;
+    flex-direction: column;
+}
+/* 让文本和海报在同一行 */
+.info_with_poster {
+    display: flex;
+    align-items: flex-start; /* 让文本顶部对齐 */
+    justify-content:space-between; /*保持一定间距 */
+}
+/* 文本信息 */
+.text_info {
+    flex: 1;
+}
+
+/* 电影海报容器 */
+.poster_container {
+    flex: 0 0 100px; /* 固定宽度 */
+    margin-left: 15px;
+}
+
+.poster_container img {
+    width: 100px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* 电影信息 */
+.movie_card p {
+    font-size: 14px;
+    color: #333;
+}
+
+/* TMDb Link */
+.movie_card a {
+    text-decoration: none;
+}
+
+.movie_card a:hover {
+    text-decoration: underline;
+}
+
+.info_with_poster{
+    margin:0;
+}
+
+.double_buttons {
+    display: flex;  
+    gap: 10px;  
+    align-items: center; 
+}
+.edit-btn {
+    background-color: #f39c12;
+    color: white;
+}
+.delete-btn {
+    background-color: #943c3c;
+    color: white;
+}
+
+.log_form{
+    margin:0 auto;
+    width:45%;
+}
+
+/* Styling for the backstage */
+#backstage_header{
+    position:relative;
+    width:100%;
+    margin-top: 1rem;
+}
+#backstage_header h2 {
+  text-align: center;   /* 标题居中 */
+  margin: 0;            /* 移除默认外边距 */
+  line-height: 1.2;     /* 避免标题高度影响布局 */
+}
+
+#backstage_header a {
+  position: absolute;   /* 绝对定位到右上角 */
+  top: 0;               /* 距离顶部 0 */
+  right: 0;             /* 距离右侧 0 */
+}
+/* Change the tab color */
+.nav-tabs .nav-link {
+    color: black; /* 未选中时的字体颜色 */
+}
+
+.nav-tabs .nav-link.active {
+    color: #943c3c ; /* 选中时的字体颜色 */
+    font-weight: bold;
+}
+
+/* Adjust the layout of tab title and create button */
+.tab_header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+.btn-create-user, .btn-add-movie, .btn-edit-category {
+    background-color: #f39c12;
+    border-color: #f39c12;
+    color: white;
+    padding: 8px 12px;
+}
+
+/* Change the color of Edit and Delete button */
+.btn-warning {
+    background-color: #f39c12;
+    border-color: #f39c12;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #943c3c;
+    border-color: #943c3c;
+    color: white;
+}
