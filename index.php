@@ -38,6 +38,19 @@ $statement->execute();
                             <div class="text_info">
                                 <h2><?= htmlspecialchars_decode($row['title']) ?></h2>
                                 <p><strong>Type:</strong> <?= htmlspecialchars($row['type']); ?></p>
+
+                                <?php
+                                $runtime = $row['runtime'];
+                                        if ($runtime >= 60) {
+                                            $hours = floor($runtime / 60);
+                                            $minutes = $runtime % 60;
+                                            $formatted_runtime = "{$hours}h {$minutes}m";
+                                        } else {
+                                            $formatted_runtime = "{$runtime}m";
+                                        }
+                                ?>
+                                <p><strong>Runtime:</strong> <?= htmlspecialchars($formatted_runtime); ?></p>
+
                                 <p><strong>Release Year:</strong> <?= htmlspecialchars($row['release_year']); ?></p>
                                 <p><strong>Language:</strong> <?= htmlspecialchars_decode($row['language']); ?></p>
                                 <p><strong>Genre:</strong> <?= htmlspecialchars($row['genre_name'] ?? 'Unkown'); ?></p>
@@ -49,11 +62,6 @@ $statement->execute();
                             </div>
                         </div>
                         <p><strong>TMDb Link:</strong> <a href="<?= htmlspecialchars($row['tmdb_link']); ?>" target="_blank"><?= htmlspecialchars_decode($row['tmdb_link']); ?></a></p>
-
-                        <!--<div class="double_buttons">
-                            <button class="edit-btn" onclick="location.href='CRUD/edit.php?id=<?= $row['movie_id'] ?>'">Edit</button>
-                            <button class="delete-btn" onclick="if(confirm('Are you sure you want to delete this movie?')) location.href='CRUD/delete.php?id=<?= $row['movie_id'] ?>'">Delete</button>
-                        </div>-->
                     </div>
                 </div>
             <?php endwhile ?>

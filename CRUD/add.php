@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 获取并清理用户输入
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
     $type = trim(filter_input(INPUT_POST, 'type', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+    $runtime = trim(filter_input(INPUT_POST, 'runtime', FILTER_VALIDATE_INT));
     $release_year = trim(filter_input(INPUT_POST, 'release_year', FILTER_VALIDATE_INT));
     $language = trim(filter_input(INPUT_POST, 'language', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
     $country = trim(filter_input(INPUT_POST, 'country', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
@@ -73,10 +74,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Validate the required information
-    if(empty($title) || empty($type) || empty($release_year) || empty($language) || empty($country) || empty($genre_id)){
+    if(empty($title) || empty($type) || empty($runtime) || empty($release_year) || empty($language) || empty($country) || empty($genre_id)){
             $error = "Error: Incomplete movie information.";
         } elseif (!is_numeric($release_year) || $release_year < 1888 || $release_year > date("Y")){
             $error = "Error: Please enter a valid release year.";
+        } elseif (!is_numeric($runtime) || $runtime < 1) {
+            $error = "Error: Please enter a valid runtime.";
         }
     // Only when the error is empty, insert the movie information into database
     if(!empty($error)){
@@ -84,12 +87,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
             try {
                 // 插入电影信息
-                $insertQuery = "INSERT INTO movies (title, type, release_year, language, country, genre_id, tmdb_link, poster_url, user_id) 
-                                VALUES (:title, :type, :release_year, :language, :country, :genre_id, :tmdb_link, :poster_url, :user_id)";
+                $insertQuery = "INSERT INTO movies (title, type, runtime, release_year, language, country, genre_id, tmdb_link, poster_url, user_id) 
+                                VALUES (:title, :type, :runtime, :release_year, :language, :country, :genre_id, :tmdb_link, :poster_url, :user_id)";
                 $insertStmt = $db->prepare($insertQuery);
                 $insertStmt->execute([
                     ':title' => $title,
                     ':type' => $type,
+                    ':runtime' => $runtime,
                     ':release_year' => $release_year,
                     ':language' => $language,
                     ':country' => $country,
@@ -132,6 +136,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <option value="movie">Movie</option>
             <option value="series">TV Show</option>
         </select><br>
+
+        <label for="runtime">Runtime (in minutes):</label>
+        <input type="number" name="runtime" required><br>
 
         <label for="release_year">Release Year:</label>
         <input type="number" name="release_year" min="1888" max="<?= date('Y') ?>" required><br>

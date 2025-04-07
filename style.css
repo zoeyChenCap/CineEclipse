@@ -158,13 +158,13 @@ a{
 
 /* 电影海报容器 */
 .poster_container {
-    flex: 0 0 100px; /* 固定宽度 */
+    flex: 0 0 110px; /* 固定宽度 */
     margin-left: 15px;
 }
 
 .poster_container img {
-    width: 100px;
-    height: 150px;
+    width: 110px;
+    height: 165px;
     object-fit: cover;
     border-radius: 8px;
 }
@@ -173,6 +173,7 @@ a{
 .movie_card p {
     font-size: 14px;
     color: #333;
+    margin: 8px;
 }
 
 /* TMDb Link */

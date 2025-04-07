@@ -107,6 +107,19 @@ $movies = $statement->fetchAll(PDO::FETCH_ASSOC);
                                     <div class="text_info">
                                         <h2><?= htmlspecialchars_decode($row['title']) ?></h2>
                                         <p><strong>Type:</strong> <?= htmlspecialchars($row['type']); ?></p>
+
+                                        <?php
+                                        $runtime = $row['runtime'];
+                                        if ($runtime >= 60) {
+                                            $hours = floor($runtime / 60);
+                                            $minutes = $runtime % 60;
+                                            $formatted_runtime = "{$hours}h {$minutes}m";
+                                        } else {
+                                            $formatted_runtime = "{$runtime}m";
+                                        }
+                                        ?>
+                                        <p><strong>Runtime:</strong> <?= htmlspecialchars($formatted_runtime); ?></p>
+
                                         <p><strong>Release Year:</strong> <?= htmlspecialchars($row['release_year']); ?></p>
                                         <p><strong>Language:</strong> <?= htmlspecialchars_decode($row['language']); ?></p>
                                         <p><strong>Genre:</strong> <?= htmlspecialchars($row['genre_name'] ?? 'Unknown'); ?></p>
