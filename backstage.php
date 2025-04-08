@@ -3,21 +3,64 @@ session_start();
 require_once('connect.php');
 require_once('authenticate.php');
 
+// Set the active tab by default
+$active_tab = $_GET['tab'] ?? '#users';
+
 if ($_SESSION['role'] !== 'admin') {
     die("Access Denied: only Admin can manage user data.");
 }
 
-// Obtain all users (not include admin) information 
+// 处理 AJAX 请求（在查询用户数据之前）
+if (isset($_GET['sort_column']) && isset($_GET['sort_order'])) {
+    header('Content-Type: application/json');
+
+    // AJAX专用的排序参数处理
+    $allowed_columns = ['title', 'release_year', 'runtime', 'created_at'];
+    $allowed_orders = ['ASC', 'DESC'];
+
+    $sort_column = in_array($_GET['sort_column'], $allowed_columns) 
+        ? $_GET['sort_column'] 
+        : 'release_year';
+        
+    $sort_order = in_array(strtoupper($_GET['sort_order']), $allowed_orders) 
+        ? strtoupper($_GET['sort_order']) 
+        : 'DESC';
+
+    // Obtain all movies
+    $query = "SELECT m.*, g.genre_name 
+              FROM Movies m
+              LEFT JOIN Genres g ON m.genre_id = g.genre_id
+              ORDER BY $sort_column $sort_order";
+    // Prepare and execute the statement
+    $statement = $db->prepare($query);
+    $statement->execute();
+    $movies = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($movies);
+    exit; // 终止脚本，不输出后续HTML
+    }
+
+// 正常页面加载
+$sort_column = $_GET['sort'] ?? 'created_at';
+$sort_order = $_GET['order'] ?? 'DESC';
+
+// Obtain all users (not include admin) information (普通页面请求时才执行)
 $query = "SELECT * FROM Users WHERE role = 'user' "; // Only search user accounts
 $stmt = $db->prepare($query);
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Obtain all movies
+// Obtain all genres from genre table (普通页面请求时才执行)
+$query = "SELECT * FROM Genres ORDER BY genre_id ASC"; 
+$stmt = $db->prepare($query);
+$stmt->execute();
+$genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// 获取电影数据（用于首次加载页面）
 $query = "SELECT m.*, g.genre_name 
           FROM Movies m
           LEFT JOIN Genres g ON m.genre_id = g.genre_id
-          ORDER BY m.release_year DESC";
+          ORDER BY $sort_column $sort_order";
 $statement = $db->prepare($query);
 $statement->execute();
 $movies = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -44,13 +87,13 @@ $movies = $statement->fetchAll(PDO::FETCH_ASSOC);
         <!-- Navigation -->
         <ul class="nav nav-tabs" id="adminTabs">
             <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="tab" href="#users">User Management</a>
+                <a class="nav-link <?= $active_tab == '#users' ? 'active' : '' ?>" data-bs-toggle="tab" href="#users">User Management</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#content">Content Management</a>
+                <a class="nav-link <?= $active_tab == '#content' ? 'active' : '' ?>" data-bs-toggle="tab" href="#content">Content Management</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#categories">Category Management</a>
+                <a class="nav-link <?= $active_tab == '#genres' ? 'active' : '' ?>" data-bs-toggle="tab" href="#genres">Genre Management</a>
             </li>
         </ul>
         
@@ -99,56 +142,59 @@ $movies = $statement->fetchAll(PDO::FETCH_ASSOC);
                     <h3>Movie Management</h3>
                     <a href="CRUD/add.php" class="btn btn-add-movie">Add Movie</a>
                 </div>
-                <div class="movies_container">
-                    <?php foreach ($movies as $row): ?>
-                        <div class="movie_card">
-                            <div class="movie_info">
-                                <div class="info_with_poster">
-                                    <div class="text_info">
-                                        <h2><?= htmlspecialchars_decode($row['title']) ?></h2>
-                                        <p><strong>Type:</strong> <?= htmlspecialchars($row['type']); ?></p>
 
-                                        <?php
-                                        $runtime = $row['runtime'];
-                                        if ($runtime >= 60) {
-                                            $hours = floor($runtime / 60);
-                                            $minutes = $runtime % 60;
-                                            $formatted_runtime = "{$hours}h {$minutes}m";
-                                        } else {
-                                            $formatted_runtime = "{$runtime}m";
-                                        }
-                                        ?>
-                                        <p><strong>Runtime:</strong> <?= htmlspecialchars($formatted_runtime); ?></p>
+                <form class="sort_movies" id="sortMoviesForm">
+                    <label for="sort_column"><strong>Sort by:</strong></label>
+                    <select name="sort_column" id="sort_column">
+                        <option value="title">Title</option>
+                        <option value="release_year">Release Year</option>
+                        <option value="runtime">Runtime</option>
+                        <option value="created_at">Created Time</option>
+                    </select>
+                    <label for="sort_order"><strong>Order:</strong></label>
+                    <select name="sort_order" id="sort_order">
+                        <option value="ASC">Ascending</option>
+                        <option value="DESC">Descending</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Sort</button>
+                </form>
 
-                                        <p><strong>Release Year:</strong> <?= htmlspecialchars($row['release_year']); ?></p>
-                                        <p><strong>Language:</strong> <?= htmlspecialchars_decode($row['language']); ?></p>
-                                        <p><strong>Genre:</strong> <?= htmlspecialchars($row['genre_name'] ?? 'Unknown'); ?></p>
-                                    </div>
-                                    <div class="poster_container">
-                                        <?php if (!empty(trim($row['poster_url']))): ?>
-                                            <img src="<?= htmlspecialchars($row['poster_url']) ?>" alt="Movie Poster">
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                                <p><strong>TMDb Link:</strong> <a href="<?= htmlspecialchars($row['tmdb_link']); ?>" target="_blank"><?= htmlspecialchars_decode($row['tmdb_link']); ?></a></p>
-                                <div class="double_buttons">
-                                    <button class="edit-btn" onclick="location.href='CRUD/edit.php?id=<?= $row['movie_id'] ?>'">Edit</button>
-                                    <button class="delete-btn" onclick="if(confirm('Are you sure you want to delete this movie?')) location.href='CRUD/delete.php?id=<?= $row['movie_id'] ?>'">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
+                <!-- Movie list will be rendered here -->
+                <div id="moviesContainer" class="movies_container"></div>
             </div>
+                
+                
 
-            <!-- Category Management -->
-            <div id="categories" class="tab-pane fade">
+            <!-- Genre Management -->
+            <div id="genres" class="tab-pane fade">
                 <div class="tab_header">
-                    <h3>Category Management</h3>
-                    <a href=" " class="btn btn-edit-category">Add Category</a>
+                    <h3>Genre Management</h3>
+                    <a href="genre_management/add_genre.php " class="btn btn-edit-category">Add Genre</a>
                 </div>
+                <table class="table table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Genre ID</th>
+                            <th>Genre Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($genres as $genre): ?>
+                            <tr>
+                                <td><?= $genre['genre_id'] ?></td>
+                                <td><?= htmlspecialchars($genre['genre_name']) ?></td>
+                                <td>
+                                    <a href="genre_management/edit_genre.php?genre_id=<?= $genre['genre_id'] ?>" class="btn btn-warning btn-sm">Edit</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
 
+
+<script src="script.js"></script>      
 </body>
 </html>

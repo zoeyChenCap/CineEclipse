@@ -72,4 +72,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </select><br>
 
     <button type="submit">Update User</button>
+    <a href="../backstage.php">Return to Backstage</a>
 </form>

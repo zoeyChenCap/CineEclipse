@@ -100,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="button" onclick="window.location.href='../backstage.php'">Cancel</button>
             </div>
         </form>
+        <a href="../backstage.php">Return to Backstage</a>
     </div>
     
 </body>
