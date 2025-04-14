@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':user_id' => $user_id,
                 ]);
 
-                echo "<script>alert('Movie added successfully!'); window.location.href = 'add.php';</script>";
+                echo "<script>alert('Movie added successfully!'); window.location.href = '../backstage.php';</script>";
             } catch (PDOException $e) {
                 echo "<script>alert('Database error: " . addslashes($e->getMessage()) . "');</script>";
             }

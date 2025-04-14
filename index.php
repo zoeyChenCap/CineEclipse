@@ -78,6 +78,7 @@ $statement->execute($params);
             <?php while ($row = $statement->fetch()): ?>
                 <div class="movie_card">
                     <div class="movie_info">
+                    <a href="movie_detail.php?id=<?= htmlspecialchars($row['movie_id']) ?>" class="movie_card_link">
                         <div class="info_with_poster">
                             <div class="text_info">
                                 <h2><?= htmlspecialchars_decode($row['title']) ?></h2>
@@ -104,6 +105,7 @@ $statement->execute($params);
                             <?php endif; ?>
                         </div>
                         <p><strong>TMDb Link:</strong> <a href="<?= htmlspecialchars($row['tmdb_link']) ?>" target="_blank"><?= htmlspecialchars_decode($row['tmdb_link']) ?></a></p>
+                    </a>
                     </div>
                 </div>
             <?php endwhile; ?>

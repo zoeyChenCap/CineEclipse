@@ -58,12 +58,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $country = trim(filter_input(INPUT_POST, 'country', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
     $genre_id = trim(filter_input(INPUT_POST, 'genre_id', FILTER_VALIDATE_INT));
     $tmdb_link = trim(filter_input(INPUT_POST, 'tmdb_link', FILTER_SANITIZE_URL));
+    $remove_poster = isset($_POST['remove_poster']); // 检查是否勾选了移除海报
 
-    // 处理海报上传
+    // 处理海报上传或删除
     $poster_url = $movie['poster_url']; // 默认使用原有海报
-    $image_upload_detected = isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK;
-
-    if ($image_upload_detected) {
+    
+    // 如果勾选了移除海报
+    if ($remove_poster && !empty($movie['poster_url'])) {
+        // 从文件系统删除海报
+        $file_path = '../' . $movie['poster_url'];
+        if (file_exists($file_path)) {
+            unlink($file_path); // 删除文件
+        }
+        $poster_url = null; // 设置为null，将从数据库移除
+    }
+    // 如果有新文件上传
+    elseif (isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK) {
         $allowed_types = ['image/jpeg', 'image/png', 'image/webp'];
         $max_size = 2 * 1024 * 1024; // 2MB
 
@@ -82,6 +92,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $destPath = file_upload_path($newFileName, 'posters');
 
             if (move_uploaded_file($fileTmpPath, $destPath)) {
+                // 删除旧海报（如果有）
+                if (!empty($movie['poster_url'])) {
+                    $old_file_path = '../' . $movie['poster_url'];
+                    if (file_exists($old_file_path)) {
+                        unlink($old_file_path);
+                    }
+                }
                 $poster_url = "posters/" . $newFileName; // 存入数据库的路径
             } else {
                 $error = "Error: File upload failed.";
@@ -98,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "Error: Please enter a valid runtime.";
     }
 
-    // Only when the error is empty, insert the movie information into database
+    // Only when the error is empty, update the movie information
     if(!empty($error)){
         echo "<script>alert('$error');</script>";
     } else {
@@ -123,13 +140,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ':movie_id' => $movie_id,
             ]);
 
-            echo "<script>alert('Movie added successfully!'); window.location.href = 'add.php';</script>";
+            echo "<script>alert('Movie updated successfully!'); window.location.href = '../backstage.php';</script>";
         } catch (PDOException $e) {
             echo "<script>alert('Database error: " . addslashes($e->getMessage()) . "');</script>";
-            }
         }
     }
-
+}
 ?>
 
 <!DOCTYPE html>
@@ -186,6 +202,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="file" name="poster"><br>
         <?php if (!empty($movie['poster_url'])): ?>
             <img src="../<?= htmlspecialchars($movie['poster_url']) ?>" width="150" alt="Movie Poster"><br>
+            <input type="checkbox" name="remove_poster" id="remove_poster">
+            <label for="remove_poster">Remove current poster</label><br>
         <?php endif; ?>
 
         <button type="submit">Update Movie</button>

@@ -297,3 +297,36 @@ form.sort_movies#sortMoviesForm {
     flex-wrap: nowrap !important; 
     padding: 10px 50px !important;
 }
+
+/* Styling for individual movie page */
+.movie_card_link{
+    text-decoration: none;
+}
+.movie_detail_container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.movie_details {
+    display: flex;
+    flex-direction: row-reverse; /* 反转顺序使海报在右 */
+    gap: 20px;
+}
+.movie_poster {
+    width: 400px;
+    height: auto;
+    /*border-radius: 5px;*/
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    object-fit: cover;
+}
+.movie_details_text {
+    flex: 1;
+}
+
+.movie_details h1 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+.movie_details p {
+    margin: 10px 0;
+}
