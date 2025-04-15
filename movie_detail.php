@@ -57,11 +57,11 @@ if ($runtime >= 60) {
             <?php endif; ?>
             
             <div class="movie_details_text">
-                <h1><?= htmlspecialchars($movie['title']) ?></h1>
+                <h1><?= htmlspecialchars_decode($movie['title']) ?></h1>
                 <p><strong>Type:</strong> <?= htmlspecialchars($movie['type']) ?></p>
                 <p><strong>Runtime:</strong> <?= $formatted_runtime ?></p>
                 <p><strong>Release Year:</strong> <?= htmlspecialchars($movie['release_year']) ?></p>
-                <p><strong>Language:</strong> <?= htmlspecialchars($movie['language']) ?></p>
+                <p><strong>Language:</strong> <?= htmlspecialchars_decode($movie['language']) ?></p>
                 <p><strong>Genre:</strong> <?= htmlspecialchars($movie['genre_name']) ?></p>
                 <?php if (!empty($movie['tmdb_link'])): ?>
                 <p><strong>TMDb Link:</strong> <a href="<?= htmlspecialchars($movie['tmdb_link']) ?>" target="_blank"><?= htmlspecialchars_decode($movie['tmdb_link']) ?></a></p>

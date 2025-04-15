@@ -48,7 +48,7 @@ function file_upload_path($original_filename, $upload_subfolder_name = 'posters'
 
 $error = "";
 
-// 处理表单提交
+// Process the form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
     $type = trim(filter_input(INPUT_POST, 'type', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
@@ -60,12 +60,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tmdb_link = trim(filter_input(INPUT_POST, 'tmdb_link', FILTER_SANITIZE_URL));
     $remove_poster = isset($_POST['remove_poster']); // 检查是否勾选了移除海报
 
-    // 处理海报上传或删除
-    $poster_url = $movie['poster_url']; // 默认使用原有海报
+    // Process the poster submissiong or deletion
+    $poster_url = $movie['poster_url']; // Using the original poster URL by default
     
-    // 如果勾选了移除海报
+    // If the admin checked the remove poster checkbox
     if ($remove_poster && !empty($movie['poster_url'])) {
-        // 从文件系统删除海报
+        // Delete the old poster file
         $file_path = '../' . $movie['poster_url'];
         if (file_exists($file_path)) {
             unlink($file_path); // 删除文件
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // 如果有新文件上传
     elseif (isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK) {
         $allowed_types = ['image/jpeg', 'image/png', 'image/webp'];
-        $max_size = 2 * 1024 * 1024; // 2MB
+        $max_size = 2 * 1024 * 1024; // Upload poster limitation is 2MB
 
         $fileTmpPath = $_FILES['poster']['tmp_name'];
         $fileName = $_FILES['poster']['name'];
