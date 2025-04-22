@@ -98,9 +98,9 @@ $statement->execute($params);
                                 <p><strong>Language:</strong> <?= htmlspecialchars_decode($row['language']) ?></p>
                                 <p><strong>Genre:</strong> <?= htmlspecialchars($row['genre_name']) ?></p>
                             </div>
-                            <?php if (!empty($row['poster_url'])): ?>
+                            <?php if (!empty($row['poster_url_thumb'])): ?>
                             <div class="poster_container">
-                                <img src="<?= htmlspecialchars($row['poster_url']) ?>" alt="Movie Poster">
+                                <img src="<?= htmlspecialchars($row['poster_url_thumb']) ?>" alt="Movie Poster Thumbnail">
                             </div>
                             <?php endif; ?>
                         </div>

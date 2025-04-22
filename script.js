@@ -100,7 +100,7 @@ function renderMovies(movies) {
                     </div>
                     ${movie.poster_url ? `
                     <div class="poster_container">
-                        <img src="${decodeHtml(escapeHtml(movie.poster_url))}" alt="Movie Poster">
+                        <img src="${decodeHtml(escapeHtml(movie.poster_url_thumb))}" alt="Movie Poster">
                     </div>
                     ` : ''}
                 </div>

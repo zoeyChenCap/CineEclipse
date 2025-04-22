@@ -2,16 +2,21 @@
 require('connect.php');
 include('header.php');
 
-// 检查是否传递了电影ID
+// Check if the movie ID is passed
 if (!isset($_GET['id'])) {
     header("Location: index.php");
     exit;
 }
 
-// 获取电影ID并防止SQL注入
+// Get the movie ID and sanitize it to prevent SQL injection
 $movie_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+// Validate the movie ID
+if ($movie_id === false || $movie_id <= 0) {
+    header("Location: index.php"); // Redirect if the ID is invalid
+    exit;
+}
 
-// 查询电影详细信息
+// Query movie details
 $query = "SELECT m.*, g.genre_name 
           FROM Movies m
           LEFT JOIN Genres g ON m.genre_id = g.genre_id
@@ -22,13 +27,13 @@ $statement->bindValue(':movie_id', $movie_id, PDO::PARAM_INT);
 $statement->execute();
 $movie = $statement->fetch();
 
-// 如果电影不存在则跳转回首页
+// Redirect to the homepage if the movie does not exist
 if (!$movie) {
     header("Location: index.php");
     exit;
 }
 
-// 格式化片长
+// Format the runtime
 $runtime = $movie['runtime'];
 if ($runtime >= 60) {
     $hours = floor($runtime / 60);
@@ -52,8 +57,8 @@ if ($runtime >= 60) {
     
     <div class="movie_detail_container">
         <div class="movie_details">
-            <?php if (!empty($movie['poster_url'])): ?>
-            <img src="<?= htmlspecialchars($movie['poster_url']) ?>" alt="<?= htmlspecialchars($movie['title']) ?> Poster" class="movie_poster">
+            <?php if (!empty($movie['poster_url_medium'])): ?>
+            <img src="<?= htmlspecialchars($movie['poster_url_medium']) ?>" alt="<?= htmlspecialchars($movie['title']) ?> Poster" class="movie_poster">
             <?php endif; ?>
             
             <div class="movie_details_text">
