@@ -33,20 +33,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $role = $_POST['role'];
 
-    // 更新用户数据
-    $query = "UPDATE users SET first_name = :first_name, last_name = :last_name, email = :email, role = :role WHERE user_id = :user_id";
-    $stmt = $db->prepare($query);
-    $stmt->bindParam(':first_name', $first_name);
-    $stmt->bindParam(':last_name', $last_name);
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':role', $role);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    // Validate the email format
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Invalid email format.";
+    }
+    else {
+        // Check if the email already exists
+        $query = "SELECT email FROM users WHERE email = :email AND user_id != :user_id";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $existing_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($stmt->execute()) {
-        header('Location: ../backstage.php');  // 更新成功后跳转到用户管理页面
-        exit();
-    } else {
-        $error = "Failed to update user.";
+        if ($existing_user) {
+            $error = "The email address is already registered, please change to a new email.";
+        } else {
+            // Update user information
+            $query = "UPDATE users SET first_name = :first_name, last_name = :last_name, email = :email, role = :role WHERE user_id = :user_id";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':first_name', $first_name);
+            $stmt->bindParam(':last_name', $last_name);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':role', $role);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+
+            if ($stmt->execute()) {
+                header('Location: ../backstage.php');  // 更新成功后跳转到用户管理页面
+                exit();
+            } else {
+                $error = "Failed to update user.";
+            }
+        }
     }
 }
 ?>

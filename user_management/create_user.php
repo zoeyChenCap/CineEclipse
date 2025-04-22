@@ -10,7 +10,7 @@ if ($_SESSION['role'] !== 'admin') {
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // 处理表单提交
+    // Process form submission
     $first_name = $_POST['fname'];
     $last_name = $_POST['lname'];
     $email = $_POST['email'];
@@ -20,8 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($password !== $confirm_password) {
         $error = "Passwords do not match. Please keep the password consistent.";
-    } else {
-        // 检查邮箱是否已经存在
+    } elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) { 
+        $error = "Invalid email format."; // Validate email format
+    } else {}
+        // Check if the email already exists
         $query = "SELECT email FROM users WHERE email = :email";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':email', $email);
@@ -31,10 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($existing_user) {
             $error = "The email address is already registered.";
         } else {
-        // 密码加密
+        // Hash the password
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-        // 插入新用户数据
+        // Insert the new user into the database
         $query = "INSERT INTO users (first_name, last_name, email, password, role) 
                   VALUES (:first_name, :last_name, :email, :password, :role)";
         $stmt = $db->prepare($query);
@@ -45,16 +47,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':role', $role);
 
         if ($stmt->execute()) {
-            // 成功创建新用户
+            // User created successfully
             header('Location: ../backstage.php');
             exit();
         } else {
-            // 插入失败
+            // Failed to create user
             $error = "Error: Could not create user.";
             }
         }
     }
-}
+
 ?>
 
 <!DOCTYPE html>
