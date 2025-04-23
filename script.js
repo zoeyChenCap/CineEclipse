@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOM已完全加载"); // 测试是否执行
     // 初始化表单值
     document.getElementById("sort_column").value = "release_year";
     document.getElementById("sort_order").value = "DESC";
@@ -40,6 +41,7 @@ function fetchMovies(sortColumn, sortOrder) {
 
     fetch(`backstage.php?sort_column=${sortColumn}&sort_order=${sortOrder}`)
         .then(response => {
+            console.log("收到响应，状态码:", response.status); // 添加这行
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -50,6 +52,7 @@ function fetchMovies(sortColumn, sortOrder) {
             return response.json();
         })
         .then(data => {
+            console.log("Fetched movies:", data);  // 👈 看看有没有 poster_url_thumb
             if (!Array.isArray(data)) {
                 throw new Error("Invalid data format");
             }
@@ -85,6 +88,9 @@ function renderMovies(movies) {
     }
 
     movies.forEach(movie => {
+        console.log("当前电影数据:", movie); // 添加这行
+        console.log("缩略图路径:", movie.poster_url_thumb); // 添加这行
+
         const movieElement = document.createElement('div');
         movieElement.classList.add('movie_card');
         movieElement.innerHTML = `
@@ -98,9 +104,9 @@ function renderMovies(movies) {
                         <p><strong>Language:</strong> ${decodeHtml(escapeHtml(movie.language))}</p>
                         <p><strong>Genre:</strong> ${decodeHtml(escapeHtml(movie.genre_name || 'Unknown'))}</p>
                     </div>
-                    ${movie.poster_url ? `
+                    ${movie.poster_url_thumb ? `
                     <div class="poster_container">
-                        <img src="${decodeHtml(escapeHtml(movie.poster_url_thumb))}" alt="Movie Poster">
+                        <img src="${movie.poster_url_thumb}" alt="Movie Poster">
                     </div>
                     ` : ''}
                 </div>
@@ -120,6 +126,7 @@ function renderMovies(movies) {
 }
 
 // Handle the reset button click
+if (window.location.pathname === '/index.php') {
 document.getElementById("resetBtn").addEventListener("click", function() {
     // Clear all input fields and reload the page to reset the filter
     document.querySelector('[name="search"]').value = '';
@@ -129,3 +136,4 @@ document.getElementById("resetBtn").addEventListener("click", function() {
     // Reload the page to reset search query
     window.location.href = 'index.php';
 });
+}

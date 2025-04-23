@@ -195,6 +195,6 @@ $movies = $statement->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
 
-<script src="script.js"></script>      
+<script src="script.js" defer></script>      
 </body>
 </html>
