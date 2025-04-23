@@ -42,7 +42,7 @@ function file_upload_path($original_filename, $upload_subfolder_name = 'posters'
 }
 
 // Fetch movie information from TMDb via API
-function fetchTMDbData($url) {
+/*function fetchTMDbData($url) {
     $apiKey = '7d694c4e2a2366e2deeab57aba8c7597';
     preg_match('/movie\/(\d+)/', $url, $matches);
     if (!$matches) return null;
@@ -52,7 +52,7 @@ function fetchTMDbData($url) {
 
     $response = file_get_contents($apiUrl);
     return $response ? json_decode($response, true) : null;
-}
+}*/
 
 $error = "";
 // Image paths
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $genre_id = trim(filter_input(INPUT_POST, 'genre_id', FILTER_VALIDATE_INT));
     $tmdb_link = trim(filter_input(INPUT_POST, 'tmdb_link', FILTER_SANITIZE_URL));
 
-    if (isset($_POST['autofill']) && !empty($tmdb_link)) {
+    /*if (isset($_POST['autofill']) && !empty($tmdb_link)) {
         // === 自动填充 TMDb 数据 ===
         $movieData = fetchTMDbData($tmdb_link);
         if ($movieData) {
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-} else {
+} else { */
     // Upload poster manually if TMDb link is not provided
     $image_upload_detected = empty($poster_url) && isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK;
     if ($image_upload_detected) {
@@ -164,7 +164,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-}
 
     // Validate required fields
     if (empty($title) || empty($type) || empty($runtime) || empty($release_year) || empty($language) || empty($country) || empty($genre_id)) {
@@ -228,7 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div>
         <label for="type">Type:</label>
-        <input type="text" name="type" id="type" value="<?= htmlspecialchars($type ?? '') ?>" required>
+        <input type="text" name="type" id="type" required>
     </div>
 
     <div>
@@ -238,7 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div>
         <label for="release_year">Release Year:</label>
-        <input type="number" name="release_year" id="release_year" value="<?= htmlspecialchars($release_year ?? '') ?>" required>
+        <input type="number" name="release_year" id="release_year" required>
     </div>
 
     <div>
@@ -248,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div>
         <label for="country">Country:</label>
-        <input type="text" name="country" id="country" value="<?= htmlspecialchars($country ?? '') ?>" required>
+        <input type="text" name="country" id="country" required>
     </div>
 
     <div>
