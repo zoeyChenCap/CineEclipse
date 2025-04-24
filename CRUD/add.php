@@ -226,93 +226,88 @@ if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) 
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container mt-4">
+        <!-- 顶部导航按钮 -->
+        <div class="d-flex justify-content-end mb-3">
+            <a href="../backstage.php" class="btn btn-secondary me-2">Return to Backstage</a>
+            <a href="../index.php" class="btn btn-secondary">Back to Movie List</a>
+        </div>
+
         <h2 class="text-center mb-4">Add New Movie</h2>
         <p class="text-center text-muted">
             Add a new movie by autofill via TMDb link or manually enter the information.
         </p>
         <form action="add.php" method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm bg-light form-container">
-            <!-- TMDb Link and Autofill Button -->
-            <div class="row mb-3 align-items-center">
-                <div class="col-md-8">
-                    <label for="tmdb_link" class="form-label">TMDb Link:</label>
-                    <input type="url" name="tmdb_link" id="tmdb_link" class="form-control" required>
-                </div>
-                <div class="col-md-4">
-                    <button type="button" name="autofill" id="autofillBtn" class="btn btn-primary w-auto">Autofill from TMDb</button>
+            <!-- TMDb Link 和 Autofill Button -->
+            <div class="row mb-3">
+                <div class="col-md-12 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center" style="width: 75%;">
+                        <label for="tmdb_link" class="form-label me-3">TMDb Link:</label>
+                        <input type="url" name="tmdb_link" id="tmdb_link" class="form-control" required>
+                    </div>
+                    <button type="button" name="autofill" id="autofillBtn" class="btn btn-primary w-auto ms-3">Autofill from TMDb</button>
                 </div>
             </div>
 
-            <!-- Title and Type -->
+            <!-- Title, Type 和 Release Year -->
             <div class="row mb-3">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="title" class="form-label">Title:</label>
                     <input type="text" name="title" id="title" class="form-control" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="type" class="form-label">Type:</label>
                     <input type="text" name="type" id="type" class="form-control" required>
                 </div>
-            </div>
-
-            <!-- Runtime and Release Year -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label for="runtime" class="form-label">Runtime (minutes):</label>
-                    <input type="number" name="runtime" id="runtime" class="form-control" required>
-                </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="release_year" class="form-label">Release Year:</label>
                     <input type="number" name="release_year" id="release_year" class="form-control" required>
                 </div>
             </div>
 
-            <!-- Language and Country -->
+            <!-- Runtime, Language 和 Country -->
             <div class="row mb-3">
-                <div class="col-md-6">
+                <div class="col-md-4">
+                    <label for="runtime" class="form-label">Runtime (minutes):</label>
+                    <input type="number" name="runtime" id="runtime" class="form-control" required>
+                </div>
+                <div class="col-md-4">
                     <label for="language" class="form-label">Language:</label>
                     <input type="text" name="language" id="language" class="form-control" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="country" class="form-label">Country:</label>
                     <input type="text" name="country" id="country" class="form-control" required>
                 </div>
             </div>
 
-            <!-- TMDb Suggested Genres and Genre -->
+            <!-- TMDb Suggested Genres 和 Genre -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label>TMDb Suggested Genres:</label>
                     <strong><span id="tmdb_genres_label"></span></strong>
                 </div>
                 <div class="col-md-6">
-                    <label for="genre_id" class="form-label">Genre:</label>
-                    <select name="genre_id" id="genre_id" class="form-select" required>
+                    <label for="genre_id" class="form-label d-inline">Genre:</label>
+                    <p class="text-muted d-inline ms-2">Choose a genre based on TMDb suggestions.</p>
+                    <select name="genre_id" id="genre_id" class="form-select mt-2" required>
                         <option value="">-- Select Genre --</option>
                         <?php foreach ($genres as $genre): ?>
                             <option value="<?= $genre['genre_id'] ?>"><?= htmlspecialchars($genre['genre_name']) ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <p class="text-muted mt-1">Choose a genre based on TMDb suggestions.</p>
                 </div>
             </div>
 
-            <!-- Poster Upload -->
+            <!-- Poster Upload 和 Add Movie 按钮 -->
             <div class="row mb-3">
-                <div class="col-md-12">
-                    <label for="poster" class="form-label">Poster Image:</label>
-                    <input type="file" name="poster" id="poster" class="form-control" accept="image/*">
-                    <input type="hidden" name="poster_from_tmdb" id="poster_from_tmdb">
-                    <div id="poster_preview_container" style="display: none;" class="mt-3">
-                        <img id="poster_preview" src="" alt="Poster Preview" class="img-thumbnail">
+                <div class="col-md-12 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center" style="width: 75%;">
+                        <label for="poster" class="form-label me-3">Poster Image:</label>
+                        <input type="file" name="poster" id="poster" class="form-control" accept="image/*">
                     </div>
+                    <button type="submit" class="btn btn-primary w-auto ms-3">Add Movie</button>
                 </div>
-            </div>
-
-            <!-- Buttons -->
-            <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-success">Add Movie</button>
-                <a href="../backstage.php" class="btn btn-secondary">Return to Backstage</a>
             </div>
         </form>
     </div>
