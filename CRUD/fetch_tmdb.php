@@ -1,4 +1,15 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script fetches movie or TV show details from the TMDb API based on a provided TMDb link. 
+                It determines whether the link refers to a movie or TV show, retrieves relevant data (e.g., title, 
+                language, release year, runtime, genres, poster URLs), and returns the information in JSON format. 
+                It handles errors such as invalid links or missing data and provides feedback to the client.
+
+****************/
+
 require('../connect.php');
 
 function fetchTMDbData($url) {

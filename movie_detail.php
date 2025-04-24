@@ -1,4 +1,15 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script generates a detailed page for a specific movie on the CineEclipse website. 
+                It retrieves movie details from the database based on the provided movie ID, validates the ID, 
+                and displays information such as title, runtime, release year, language, genre, and poster. 
+                It also includes a link to the movie's TMDb page and a back button to return to the movie list.
+
+****************/
+
 require('connect.php');
 include('header.php');
 

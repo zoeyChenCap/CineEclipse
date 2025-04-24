@@ -1,4 +1,14 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script allows an admin to delete a user account from the database. It verifies the user's session and role, 
+                retrieves the user ID from the URL, and deletes the corresponding user record. The script provides feedback and 
+                redirects the admin to the user management page upon successful deletion.
+
+****************/
+
 session_start();
 require_once('../connect.php');
 require_once('../authenticate.php');

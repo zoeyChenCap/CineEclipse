@@ -1,4 +1,16 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script serves as the admin dashboard for managing users, movies, 
+                and genres. It verifies the admin's session and role, handles AJAX requests 
+                for sorting movies, and retrieves data for users, movies, and genres from 
+                the database. The script provides tab-based navigation for managing user 
+                accounts, movie records, and genres, with options to create, edit, or delete entries.
+
+****************/
+
 session_start();
 require_once('connect.php');
 require_once('authenticate.php');

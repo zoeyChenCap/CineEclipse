@@ -1,4 +1,14 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script allows an admin to delete a movie from the database. It verifies the user's session and role, 
+                checks if the movie ID exists, fetches the movie details, and deletes the movie if it exists. It also provides 
+                feedback to the user and redirects them back to the admin dashboard.
+
+****************/
+
 session_start();
 require('../connect.php'); // Connect to the database
 

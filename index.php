@@ -1,4 +1,17 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script generates the homepage for the CineEclipse website. 
+                It includes a search form that allows users to filter movies by title, 
+                release year, and genre. The script retrieves movie data from the database 
+                based on the search criteria, displays the results in a card format with 
+                details like title, runtime, release year, language, genre, and poster, 
+                and provides links to detailed movie pages.
+
+****************/
+
 require('connect.php');
 
 // Check whether user is logged in

@@ -1,4 +1,16 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script allows an admin to edit movie details in the database. 
+                It verifies the user's session and role, fetches the current movie and 
+                genre information, and processes form submissions to update the movie's 
+                details. It includes validation for inputs, handles poster uploads and 
+                resizing, and provides feedback to the user.
+
+****************/
+
 session_start();
 require('../connect.php'); // Connect to the database 
 

@@ -1,4 +1,15 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script handles user authentication. It includes a login function to verify user credentials, 
+                set session variables upon successful login, and retrieve user details from the database. It also 
+                provides utility functions like isAdmin to check if the logged-in user is an admin and isLoggedIn 
+                to verify if a user is logged in.
+
+****************/
+
 require('connect.php');  
 
 function login($email, $password) {

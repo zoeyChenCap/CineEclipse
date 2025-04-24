@@ -1,4 +1,15 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This code implements a form for adding new movies to a database. It allows users (admin only) 
+                to manually input movie details or autofill them using a TMDb link. The form includes fields for title, 
+                type, runtime, release year, language, country, genre, and poster image. It validates inputs, handles file 
+                uploads, resizes images, and stores movie data in the database.
+
+****************/
+
 session_start();
 require('../connect.php');
 

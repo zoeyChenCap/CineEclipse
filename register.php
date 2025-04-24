@@ -1,4 +1,16 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script handles user registration for the CineEclipse website. 
+                It validates user inputs, checks for duplicate email addresses, hashes the password, 
+                and inserts the new user into the database with a default "user" role. The script 
+                provides feedback for successful registration or errors and includes a registration 
+                form with options to cancel or proceed to login.
+
+****************/
+
 require 'connect.php'; // Datebase connection
 
 $error = "";

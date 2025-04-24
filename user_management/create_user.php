@@ -1,4 +1,16 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script allows an admin to create a new user account in the database. 
+                It verifies the user's session and role, validates the input fields (e.g., email format, 
+                password confirmation), checks for duplicate email addresses, hashes the password, 
+                and inserts the new user into the database. The script provides feedback to the admin 
+                and includes a form for entering user details.
+
+****************/
+
 session_start();
 require_once('../connect.php');
 require_once('../authenticate.php');

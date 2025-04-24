@@ -1,4 +1,15 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script handles the login functionality for the CineEclipse website. It verifies user credentials 
+                by checking the email and password against the database, sets session variables upon successful login, and 
+                redirects the user to the homepage. If the login fails, it displays an error message. The script also 
+                includes a login form with options to register or cancel.
+
+****************/
+
 session_start();
 require 'connect.php'; // database connection
 

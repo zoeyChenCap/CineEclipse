@@ -1,4 +1,16 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script allows an admin to edit an existing genre in the database. 
+                It verifies the user's session and role, fetches the current genre details, 
+                and processes form submissions to update the genre name. The script includes 
+                validation to prevent duplicate genre names (case-insensitive) and provides 
+                feedback to the user with error or success messages.
+
+****************/
+
 session_start();
 require_once('../connect.php');
 require_once('../authenticate.php');

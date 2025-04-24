@@ -1,3 +1,14 @@
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This JavaScript code enables autofill functionality for a movie form using a TMDb link. 
+                It fetches movie details via an API, populates form fields (e.g., title, language, release year, 
+                runtime, etc.), and updates the poster preview. It also validates uploaded poster files and 
+                displays a preview of the selected image.
+
+****************/
+
 document.addEventListener('DOMContentLoaded', function () {
     const autofillBtn = document.getElementById('autofillBtn');
     const posterInput = document.getElementById('poster');

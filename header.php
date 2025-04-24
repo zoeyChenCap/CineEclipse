@@ -1,4 +1,16 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script generates the header for the CineEclipse website. 
+                It starts a session, checks the user's login status and role, 
+                and displays navigation links accordingly. Logged-out users see 
+                options to sign up or log in, while logged-in users see personalized 
+                greetings and options based on their role (e.g., admin access to the backstage).
+
+****************/
+
 session_start();
 $logged_in = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
 $fullname = ($_SESSION['fname'] ?? '') . ' ' . ($_SESSION['lname'] ?? '');

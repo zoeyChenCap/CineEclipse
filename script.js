@@ -1,3 +1,14 @@
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This JavaScript file manages movie-related functionality for the CineEclipse website. It handles sorting and filtering movies, 
+                fetching movie data via AJAX, and dynamically rendering movie cards with details like title, runtime, release year, language, 
+                genre, and poster. It also includes utility functions for formatting runtime, decoding HTML, and handling user actions like 
+                editing or deleting movies.
+
+****************/
+
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM已完全加载"); // Test if the script is executing
     // Initialize form values

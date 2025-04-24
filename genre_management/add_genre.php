@@ -1,4 +1,15 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script allows an admin to add a new genre to the database. It verifies the 
+                user's session and role, checks if the genre name already exists (case-insensitive), 
+                and inserts the new genre if it doesn't. The script provides feedback to the user, 
+                including error or success messages, and includes a form for entering the genre name.
+
+****************/
+
 session_start();
 require_once('../connect.php');
 require_once('../authenticate.php');

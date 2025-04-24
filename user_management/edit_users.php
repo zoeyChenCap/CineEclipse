@@ -1,4 +1,17 @@
 <?php
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This PHP script allows an admin to edit user details in the database. 
+                It verifies the user's session and role, retrieves the user information 
+                based on the user ID, and processes form submissions to update the user's 
+                first name, last name, email, and role. The script includes validation for 
+                email format and checks for duplicate email addresses, providing feedback 
+                with error or success messages.
+
+****************/
+
 session_start();
 require_once('../connect.php');
 require_once('../authenticate.php');

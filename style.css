@@ -1,3 +1,15 @@
+/*******w******** 
+    
+    Name:Zoey Chen
+    Date:2025/04/24
+    Description:This CSS file defines the styling for the CineEclipse website. 
+                It includes styles for the layout, forms, buttons, navigation, 
+                movie cards, and detailed movie pages. It also provides responsive 
+                designs for sorting and filtering movies, as well as custom styles 
+                for the admin dashboard and user interactions like editing or deleting entries.
+
+****************/
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
