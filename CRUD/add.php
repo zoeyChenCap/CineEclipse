@@ -30,7 +30,7 @@ $genres = $genresStatement->fetchAll(PDO::FETCH_ASSOC);
 // Generate upload path
 function file_upload_path($original_filename, $upload_subfolder_name = 'posters', $suffix = '') {
     $current_folder = dirname(__FILE__);
-    $filename = pathinfo($original_filename, PATHINFO_FILENAME);
+    $filename = basename(pathinfo($original_filename, PATHINFO_FILENAME)); // 使用 basename 防止目录遍历
     $extension = pathinfo($original_filename, PATHINFO_EXTENSION);
 
     if (!empty($suffix)) {
@@ -38,21 +38,15 @@ function file_upload_path($original_filename, $upload_subfolder_name = 'posters'
     }
 
     $path_segments = [$current_folder, "..", $upload_subfolder_name, $filename . '.' . $extension];
-    return join(DIRECTORY_SEPARATOR, $path_segments);
+    $path = join(DIRECTORY_SEPARATOR, $path_segments);
+
+    // 确保目录存在
+    if (!is_dir(dirname($path))) {
+        mkdir(dirname($path), 0755, true);
+    }
+
+    return $path;
 }
-
-// Fetch movie information from TMDb via API
-/*function fetchTMDbData($url) {
-    $apiKey = '7d694c4e2a2366e2deeab57aba8c7597';
-    preg_match('/movie\/(\d+)/', $url, $matches);
-    if (!$matches) return null;
-
-    $movieId = $matches[1];
-    $apiUrl = "https://api.themoviedb.org/3/movie/$movieId?api_key=$apiKey&language=en-US";
-
-    $response = file_get_contents($apiUrl);
-    return $response ? json_decode($response, true) : null;
-}*/
 
 $error = "";
 // Image paths
@@ -75,53 +69,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $genre_id = trim(filter_input(INPUT_POST, 'genre_id', FILTER_VALIDATE_INT));
     $tmdb_link = trim(filter_input(INPUT_POST, 'tmdb_link', FILTER_SANITIZE_URL));
 
-    /*if (isset($_POST['autofill']) && !empty($tmdb_link)) {
-        // === 自动填充 TMDb 数据 ===
-        $movieData = fetchTMDbData($tmdb_link);
-        if ($movieData) {
-            $title = $movieData['title'] ?? $title;
-            $language = $movieData['original_language'] ?? $language;
-            $release_year = $movieData['release_year'] ?? $release_year;
-            $runtime = $movieData['runtime'] ?? $runtime;
-            $country = $movieData['country'] ?? $country;
-            $type = $movieData['tmdb_type'] ?? $type;
-
-            foreach ($genres as $genre) {
-                foreach ($movieData['genres'] as $g) {
-                    if (strtolower($genre['genre_name']) === strtolower($g['name'])) {
-                        $genre_id = $genre['genre_id'];
-                        break 2;
-                    }
-                }
-            }
-    if (!empty($movieData['poster_path'])) {
-        $posterPath = "https://image.tmdb.org/t/p/original" . $movieData['poster_path'];
-        $imageData = file_get_contents($posterPath);
-        $newFileName = uniqid() . '_tmdb.jpg';
-        $destPath = file_upload_path($newFileName, 'posters');
-        file_put_contents($destPath, $imageData);
-        $poster_url = "posters/" . $newFileName;
-
-        try {
-            $mediumPath = file_upload_path($newFileName, 'posters', '_medium');
-            $imageMedium = new ImageResize($destPath);
-            $imageMedium->resizeToWidth(400);
-            $imageMedium->save($mediumPath);
-            $poster_url_medium = "posters/" . pathinfo($newFileName, PATHINFO_FILENAME) . "_medium.jpg";
-
-            $thumbPath = file_upload_path($newFileName, 'posters', '_thumb');
-            $imageThumb = new ImageResize($destPath);
-            $imageThumb->resizeToWidth(110);
-            $imageThumb->save($thumbPath);
-            $poster_url_thumb = "posters/" . pathinfo($newFileName, PATHINFO_FILENAME) . "_thumb.jpg";
-        } catch (Exception $e) {
-            $error = "Image resize failed: " . $e->getMessage();
-            }
-        }
-    }
-} else { */
     // Upload poster manually if TMDb link is not provided
     $image_upload_detected = empty($poster_url) && isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK;
+
+    $poster_from_tmdb = isset($_POST['poster_from_tmdb']) ? trim($_POST['poster_from_tmdb']) : "";
+$downloaded_from_tmdb = false;
+
+if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) {
+    // 从 TMDb 下载图片
+    $image_data = file_get_contents($poster_from_tmdb);
+    if ($image_data === false) {
+        $error = "Failed to download image from TMDb. Please check the URL.";
+    }
+
+    if ($image_data !== false) {
+        $ext = pathinfo(parse_url($poster_from_tmdb, PHP_URL_PATH), PATHINFO_EXTENSION);
+        $allowed_types = ['jpg', 'jpeg', 'png', 'webp'];
+        if (!in_array(strtolower($ext), $allowed_types)) {
+            $error = "TMDb image type not supported.";
+        } else {
+            $newFileName = uniqid() . '_tmdb.' . $ext;
+            $destPath = file_upload_path($newFileName, 'posters');
+
+            // 保存图片到本地
+            file_put_contents($destPath, $image_data);
+            $poster_url = "posters/" . $newFileName;
+
+            try {
+                // 中图
+                $mediumPath = file_upload_path($newFileName, 'posters', '_medium');
+                $imageMedium = new ImageResize($destPath);
+                $imageMedium->resizeToWidth(400);
+                $imageMedium->save($mediumPath);
+                $poster_url_medium = "posters/" . pathinfo($newFileName, PATHINFO_FILENAME) . "_medium." . $ext;
+
+                // 缩略图
+                $thumbPath = file_upload_path($newFileName, 'posters', '_thumb');
+                $imageThumb = new ImageResize($destPath);
+                $imageThumb->resizeToWidth(110);
+                $imageThumb->save($thumbPath);
+                $poster_url_thumb = "posters/" . pathinfo($newFileName, PATHINFO_FILENAME) . "_thumb." . $ext;
+
+                $downloaded_from_tmdb = true;
+            } catch (Exception $e) {
+                $error = "TMDb image resize failed: " . $e->getMessage();
+            }
+        }
+    } else {
+        $error = "Failed to download image from TMDb.";
+    }
+}
+
     if ($image_upload_detected) {
         $allowed_types = ['image/jpeg', 'image/png', 'image/webp'];
         $max_size = 2 * 1024 * 1024; // 2MB
@@ -130,6 +128,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fileName = $_FILES['poster']['name'];
         $fileSize = $_FILES['poster']['size'];
         $fileType = mime_content_type($fileTmpPath);
+        $allowed_types = ['image/jpeg', 'image/png', 'image/webp'];
+        if (!in_array($fileType, $allowed_types)) {
+            $error = "Invalid file type. Only JPG, PNG, and WEBP are allowed.";
+        }
 
         if (!in_array($fileType, $allowed_types)) {
             $error = "Invalid file type. Only JPG, PNG, and WEBP are allowed.";
@@ -145,16 +147,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 try {
                     // Medium version
                     $mediumPath = file_upload_path($newFileName, 'posters', '_medium');
-                    $imageMedium = new ImageResize($destPath);
-                    $imageMedium->resizeToWidth(400);
-                    $imageMedium->save($mediumPath);
+                    $thumbPath = file_upload_path($newFileName, 'posters', '_thumb');
+                    try {
+                        $imageMedium = new ImageResize($destPath);
+                        $imageMedium->resizeToWidth(400);
+                        $imageMedium->save($mediumPath);
+
+                        $imageThumb = new ImageResize($destPath);
+                        $imageThumb->resizeToWidth(110);
+                        $imageThumb->save($thumbPath);
+                    } catch (Exception $e) {
+                        // 删除已生成的文件
+                        if (file_exists($destPath)) unlink($destPath);
+                        if (file_exists($mediumPath)) unlink($mediumPath);
+                        if (file_exists($thumbPath)) unlink($thumbPath);
+
+                        $error = "Image resize failed: " . $e->getMessage();
+                    }
                     $poster_url_medium = "posters/" . pathinfo($newFileName, PATHINFO_FILENAME) . "_medium." . pathinfo($newFileName, PATHINFO_EXTENSION);
 
                     // Thumbnail version
-                    $thumbPath = file_upload_path($newFileName, 'posters', '_thumb');
-                    $imageThumb = new ImageResize($destPath);
-                    $imageThumb->resizeToWidth(110);
-                    $imageThumb->save($thumbPath);
                     $poster_url_thumb = "posters/" . pathinfo($newFileName, PATHINFO_FILENAME) . "_thumb." . pathinfo($newFileName, PATHINFO_EXTENSION);
                 } catch (Exception $e) {
                     $error = "Image resize failed: " . $e->getMessage();
@@ -168,10 +180,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate required fields
     if (empty($title) || empty($type) || empty($runtime) || empty($release_year) || empty($language) || empty($country) || empty($genre_id)) {
         $error = "Please fill in all required fields.";
-    } elseif (!is_numeric($release_year) || $release_year < 1888 || $release_year > date("Y")) {
-        $error = "Please enter a valid release year.";
-    } elseif (!is_numeric($runtime) || $runtime < 1) {
-        $error = "Please enter a valid runtime.";
+    } elseif (!is_numeric($release_year) || $release_year < 1888 || $release_year > intval(date("Y"))) {
+        $error = "Please enter a valid release year between 1888 and " . date("Y") . ".";
+    } elseif (!is_numeric($runtime) || $runtime <= 0) {
+        $error = "Please enter a valid runtime greater than 0.";
     }
 
     // Insert into DB if valid
@@ -213,6 +225,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <h2>Add New Movie</h2>
+<p class="description">
+    Use the form below to add a new movie to the database. You can either autofill the movie details using a TMDb link or manually enter the information. 
+</p>
 <form action="add.php" method="POST" enctype="multipart/form-data">
     <div>
         <label for="tmdb_link">TMDb Link:</label>
@@ -222,7 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div>
         <label for="title">Title:</label>
-        <input type="text" name="title" id="title" value="<?= htmlspecialchars($title) ?>" required>
+        <input type="text" name="title" id="title" required>
     </div>
 
     <div>
@@ -267,6 +282,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div>
         <label for="poster">Poster Image:</label>
         <input type="file" name="poster" id="poster" accept="image/*">
+        <input type="hidden" name="poster_from_tmdb" id="poster_from_tmdb">
+        <div id="poster_preview_container" style="display: none;">
+            <img id="poster_preview" src="" alt="Poster Preview">
+        <img id="poster_preview" src="" alt="" >
     </div>
 
     <div>

@@ -25,7 +25,7 @@ function fetchTMDbData($url) {
     $data = json_decode($response, true);
     if (!$data) return null;
 
-    // 统一输出格式（包括自动填 title 和 type 字段）
+    // 统一输出格式
     return [
         'title' => $data['title'] ?? $data['name'] ?? '',
         'original_language' => $data['original_language'] ?? '',
@@ -34,7 +34,8 @@ function fetchTMDbData($url) {
         'runtime' => $data['runtime'] ?? ($data['episode_run_time'][0] ?? null),
         'country' => $data['production_countries'][0]['iso_3166_1'] ?? ($data['origin_country'][0] ?? ''),
         'genres' => $data['genres'] ?? [],
-        'poster_path' => $data['poster_path'] ?? '',
+        'poster_url' => !empty($data['poster_path']) ? "https://image.tmdb.org/t/p/original" . $data['poster_path'] : '',
+        'poster_url_thumb' => !empty($data['poster_path']) ? "https://image.tmdb.org/t/p/w200" . $data['poster_path'] : '',
         'tmdb_type' => $type,  // movie or tv
     ];
 }
@@ -56,6 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     return $g['name'];
                 }, $movieData['genres']),
                 'type' => $movieData['tmdb_type'] ?? '',
+                'poster_url' => $movieData['poster_url'] ?? '', // Add the original poster URL
+                'poster_url_thumb' => $movieData['poster_url_thumb'] ?? '', // Add the thumbnail poster URL
             ]);
         } else {
             echo json_encode(['success' => false, 'error' => 'Movie not found']);
