@@ -6,7 +6,7 @@ function fetchTMDbData($url) {
     $movieId = null;
     $type = null;
 
-    // 判断是电影还是电视剧
+    // Decide the link is movie or tv based on the URL
     if (preg_match('/movie\/(\d+)/', $url, $matches)) {
         $movieId = $matches[1];
         $type = 'movie';
@@ -25,7 +25,7 @@ function fetchTMDbData($url) {
     $data = json_decode($response, true);
     if (!$data) return null;
 
-    // 统一输出格式
+    // Unify the data structure for both movies and TV shows
     return [
         'title' => $data['title'] ?? $data['name'] ?? '',
         'original_language' => $data['original_language'] ?? '',

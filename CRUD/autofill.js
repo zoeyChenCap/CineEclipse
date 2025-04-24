@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
     posterInput.addEventListener('change', function () {
         const file = posterInput.files[0];
         if (file) {
-            const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
             if (!validTypes.includes(file.type)) {
                 alert('Invalid file type. Please upload a JPG, PNG, or WEBP image.');
                 posterInput.value = ''; // Clear the input
