@@ -220,81 +220,102 @@ if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Add Movie</title>
+    <meta charset="UTF-8">
+    <title>Add Movie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-<h2>Add New Movie</h2>
-<p class="description">
-    Add a new movie by autofill via TMDb link or manually enter the information. 
-</p>
-<form action="add.php" method="POST" enctype="multipart/form-data">
-    <div>
-        <label for="tmdb_link">TMDb Link:</label>
-        <input type="url" name="tmdb_link" id="tmdb_link" required>
-        <button type="button"  name="autofill" id="autofillBtn">Autofill from TMDb</button>
-    </div>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Add New Movie</h2>
+        <p class="text-center text-muted">
+            Add a new movie by autofill via TMDb link or manually enter the information.
+        </p>
+        <form action="add.php" method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm bg-light form-container">
+            <!-- TMDb Link and Autofill Button -->
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-8">
+                    <label for="tmdb_link" class="form-label">TMDb Link:</label>
+                    <input type="url" name="tmdb_link" id="tmdb_link" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" name="autofill" id="autofillBtn" class="btn btn-primary w-auto">Autofill from TMDb</button>
+                </div>
+            </div>
 
-    <div>
-        <label for="title">Title:</label>
-        <input type="text" name="title" id="title" required>
-    </div>
+            <!-- Title and Type -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="title" class="form-label">Title:</label>
+                    <input type="text" name="title" id="title" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="type" class="form-label">Type:</label>
+                    <input type="text" name="type" id="type" class="form-control" required>
+                </div>
+            </div>
 
-    <div>
-        <label for="type">Type:</label>
-        <input type="text" name="type" id="type" required>
-    </div>
+            <!-- Runtime and Release Year -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="runtime" class="form-label">Runtime (minutes):</label>
+                    <input type="number" name="runtime" id="runtime" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="release_year" class="form-label">Release Year:</label>
+                    <input type="number" name="release_year" id="release_year" class="form-control" required>
+                </div>
+            </div>
 
-    <div>
-        <label for="runtime">Runtime (minutes):</label>
-        <input type="number" name="runtime" id="runtime" required>
-    </div>
+            <!-- Language and Country -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="language" class="form-label">Language:</label>
+                    <input type="text" name="language" id="language" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="country" class="form-label">Country:</label>
+                    <input type="text" name="country" id="country" class="form-control" required>
+                </div>
+            </div>
 
-    <div>
-        <label for="release_year">Release Year:</label>
-        <input type="number" name="release_year" id="release_year" required>
-    </div>
+            <!-- TMDb Suggested Genres and Genre -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>TMDb Suggested Genres:</label>
+                    <strong><span id="tmdb_genres_label"></span></strong>
+                </div>
+                <div class="col-md-6">
+                    <label for="genre_id" class="form-label">Genre:</label>
+                    <select name="genre_id" id="genre_id" class="form-select" required>
+                        <option value="">-- Select Genre --</option>
+                        <?php foreach ($genres as $genre): ?>
+                            <option value="<?= $genre['genre_id'] ?>"><?= htmlspecialchars($genre['genre_name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <p class="text-muted mt-1">Choose a genre based on TMDb suggestions.</p>
+                </div>
+            </div>
 
-    <div>
-        <label for="language">Language:</label>
-        <input type="text" name="language" id="language" required>
-    </div>
+            <!-- Poster Upload -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="poster" class="form-label">Poster Image:</label>
+                    <input type="file" name="poster" id="poster" class="form-control" accept="image/*">
+                    <input type="hidden" name="poster_from_tmdb" id="poster_from_tmdb">
+                    <div id="poster_preview_container" style="display: none;" class="mt-3">
+                        <img id="poster_preview" src="" alt="Poster Preview" class="img-thumbnail">
+                    </div>
+                </div>
+            </div>
 
-    <div>
-        <label for="country">Country:</label>
-        <input type="text" name="country" id="country" required>
+            <!-- Buttons -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-success">Add Movie</button>
+                <a href="../backstage.php" class="btn btn-secondary">Return to Backstage</a>
+            </div>
+        </form>
     </div>
-
-    <div>
-        <div>
-            <label>TMDb Suggested Genres: </label>
-            <strong><span id="tmdb_genres_label"></span></strong>
-        </div>
-        <p>Choose a genre based on TMDb suggestions and select from the list below.</p>
-        <label for="genre_id">Genre:</label>
-        <select name="genre_id" id="genre_id" required>
-            <option value="">-- Select Genre --</option>
-            <?php foreach ($genres as $genre): ?>
-                <option value="<?= $genre['genre_id'] ?>"><?= htmlspecialchars($genre['genre_name']) ?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
-
-    <div>
-        <label for="poster">Poster Image:</label>
-        <input type="file" name="poster" id="poster" accept="image/*">
-        <input type="hidden" name="poster_from_tmdb" id="poster_from_tmdb">
-        <div id="poster_preview_container" style="display: none;">
-            <img id="poster_preview" src="" alt="Poster Preview">
-        <img id="poster_preview" src="" alt="" >
-    </div>
-
-    <div>
-        <button type="submit">Add Movie</button>
-    </div>
-    <a href="../backstage.php">Return to Backstage</a>
-</form>
-<script src="autofill.js"></script>
-
+    <script src="autofill.js"></script>
 </body>
 </html>
