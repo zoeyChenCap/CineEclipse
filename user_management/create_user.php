@@ -64,46 +64,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../style.css?v=1.0">
     <title>Create New User</title>
 </head>
 <body>
+    <div class="container mt-4">
+        <!-- 顶部导航按钮 -->
+        <div class="d-flex justify-content-end mb-3">
+            <a href="../backstage.php" class="btn btn-secondary me-2">Return to Backstage</a>
+        </div>
 
-    <div class="log_form">
-        <h2>Create New User</h2>
+        <h2 class="text-center mb-4">Create New User</h2>
+        <p class="text-center text-muted">
+            Fill in the details below to create a new user account.
+        </p>
+
+        <!-- 显示错误信息 -->
         <?php if ($error): ?> 
-            <div class='error'><?= htmlspecialchars($error) ?></div> 
+            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div> 
         <?php endif; ?>
 
-        <form method="POST" action="create_user.php">
-            <label for="fname">First Name:</label>
-            <input type="text" id="fname" name="fname" value="" autofocus />
+        <form method="POST" action="create_user.php" class="p-4 border rounded shadow-sm bg-light form-container">
+            <!-- First Name and Last Name -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="fname" class="form-label">First Name:</label>
+                    <input type="text" id="fname" name="fname" class="form-control" value="" autofocus required>
+                </div>
+                <div class="col-md-6">
+                    <label for="lname" class="form-label">Last Name:</label>
+                    <input type="text" id="lname" name="lname" class="form-control" required>
+                </div>
+            </div>
 
-            <label for="lname">Last Name:</label>
-            <input type="text" id="lname" name="lname">
+            <!-- Email -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+            </div>
 
-            <label for="email">Email:</label>
-            <input type="email" name="email">
+            <!-- Password and Confirm Password -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="password" class="form-label">Password:</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="confirm_password" class="form-label">Confirm Password:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                </div>
+            </div>
 
-            <label for="password">Password:</label>
-            <input type="password" name="password">
+            <!-- Role -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="role" class="form-label">Role:</label>
+                    <select id="role" name="role" class="form-select" required>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+            </div>
 
-            <label for="confirm_password">Confirm the password:</label>
-            <input type="password" name="confirm_password">
-
-            <label for="role">Role:</label>
-            <select id="role" name="role">
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-            </select><br><br>
-
-            <div class="double_buttons">
-                <button type="submit">Create User</button>
-                <button type="button" onclick="window.location.href='../backstage.php'">Cancel</button>
+            <!-- Buttons -->
+            <div class="d-flex justify-content-end gap-2">
+                <button type="submit" class="btn btn-primary" style="width: 100px;">Create</button>
+                <button type="button" class="btn btn-secondary" style="width: 100px;" onclick="window.location.href='../backstage.php'">Cancel</button>
             </div>
         </form>
-        <a href="../backstage.php">Return to Backstage</a>
     </div>
-    
 </body>
 </html>

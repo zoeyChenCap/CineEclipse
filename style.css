@@ -213,12 +213,6 @@ a{
     justify-content: space-between;
     margin-bottom: 5px;
 }
-.btn-create-user, .btn-add-movie, .btn-edit-category {
-    background-color: #f39c12;
-    border-color: #f39c12;
-    color: white;
-    padding: 8px 12px;
-}
 
 /* Change the color of Edit and Delete button */
 .btn-warning {
