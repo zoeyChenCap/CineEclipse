@@ -23,14 +23,14 @@ input, select, button {
 }
 
 button {
-    background: #3498db;
+    /*background: #3498db;
     color: white;
-    border: none;
+    border: none;*/
     cursor: pointer;
 }
 
 button:hover {
-    background: #2980b9;
+    background: #1769a3;
 }
 
 .error{
@@ -39,27 +39,6 @@ button:hover {
 .success{
     color:green;
 }
-
-/*
-// Style the table of manage_users(last version)
-table {
-  width: 90%;
-  margin: 1.5rem auto;
-  padding: 8px;
-  border:1px solid black;
-  border-radius: 8px; 
-  overflow: hidden; 
-  text-align: center;
-}
-#users_list h2 {
-    margin:25px auto 10px;
-    width:200px;
-}
-#users_nav{
-    margin:0 auto;
-    gap:40px;
-    width:300px;
-}*/
 
 /* General header styles */
 header {
@@ -83,6 +62,7 @@ nav {
     display: flex;
     align-items: center;
     gap: 15px;
+    height: 40px !important;
 }
 
 /* Welcome text styling */
@@ -99,9 +79,12 @@ a{
 
 /* Styling the main part of index page */
 .movies_container {
-    max-width: 1200px;
+    /*max-width: 1200px;*/
     margin: 20px auto;
     padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
 }
 
 /* 电影标题 */
@@ -110,13 +93,6 @@ a{
     font-weight: bold;
     display: block;
     margin-bottom: 20px;
-}
-
-/* 电影卡片网格布局 */
-.movies_container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
 }
 
 /* 单个电影卡片 */
@@ -181,13 +157,9 @@ a{
     text-decoration: none;
 }
 
-.movie_card a:hover {
+/*.movie_card a:hover {
     text-decoration: underline;
-}
-
-.info_with_poster{
-    margin:0;
-}
+}*/
 
 .double_buttons {
     display: flex;  
@@ -332,13 +304,19 @@ form.sort_movies#sortMoviesForm {
 
 /* Styling the "Back to Movie List" button */
 .btn-secondary {
-    background-color: #943c3c; 
+    background-color: #943c3c;
     border-color: #943c3c; 
     color: white; 
 }
 
-.btn-secondary:hover {
+.btn-secondary, btn-primary:hover {
+    background-color: #34495e; 
+    border-color: #34495e;
+    color: white; 
+}
+
+.btn-primary {
     background-color: #f39c12; 
-    border-color: #f39c12; 
+    border-color: #f39c12;
     color: white; 
 }
