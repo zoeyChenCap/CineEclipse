@@ -67,8 +67,8 @@ $statement->execute($params);
             }
             ?>
         </select>
-        <button type="submit">Search</button>
-        <button type="button" id="resetBtn">Reset</button>
+        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="button" id="resetBtn" class="btn btn-secondary">Reset</button>
     </form>
 
     <?php if (!empty($search_query) || !empty($release_year) || !empty($genre_id)): ?>
