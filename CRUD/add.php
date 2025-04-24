@@ -226,7 +226,7 @@ if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) 
 <body>
 <h2>Add New Movie</h2>
 <p class="description">
-    Use the form below to add a new movie to the database. You can either autofill the movie details using a TMDb link or manually enter the information. 
+    Add a new movie by autofill via TMDb link or manually enter the information. 
 </p>
 <form action="add.php" method="POST" enctype="multipart/form-data">
     <div>
@@ -266,6 +266,11 @@ if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) 
     </div>
 
     <div>
+        <div>
+            <label>TMDb Suggested Genres: </label>
+            <strong><span id="tmdb_genres_label"></span></strong>
+        </div>
+        <p>Choose a genre based on TMDb suggestions and select from the list below.</p>
         <label for="genre_id">Genre:</label>
         <select name="genre_id" id="genre_id" required>
             <option value="">-- Select Genre --</option>
@@ -273,10 +278,6 @@ if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) 
                 <option value="<?= $genre['genre_id'] ?>"><?= htmlspecialchars($genre['genre_name']) ?></option>
             <?php endforeach; ?>
         </select>
-        <div style="margin-top: 5px;">
-            <label>TMDb Suggested Genres: </label>
-            <span id="tmdb_genres_label" style="font-weight: bold;"></span>
-        </div>
     </div>
 
     <div>

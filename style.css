@@ -329,3 +329,16 @@ form.sort_movies#sortMoviesForm {
 .movie_details p {
     margin: 10px 0;
 }
+
+// Styling the "Back to Movie List" button
+.btn-secondary {
+    background-color: #943c3c; /* 深红色背景 */
+    border-color: #943c3c; /* 深红色边框 */
+    color: white; /* 白色文字 */
+}
+
+.btn-secondary:hover {
+    background-color: #f39c12; /* 悬停时变为橙色 */
+    border-color: #f39c12; /* 悬停时边框变为橙色 */
+    color: white; /* 保持白色文字 */
+}

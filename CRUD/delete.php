@@ -7,6 +7,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role'])) {
     header("Location: ../login.php");
     exit;
 }
+
 // Only admin can delete movie information
 $role = $_SESSION['role'];
 if ($role !== 'admin') {
@@ -33,7 +34,7 @@ if (!$movie) {
     die("Error: Movie not found.");
 }
 
-// 删除电影
+// 删除电影记录
 $deleteQuery = "DELETE FROM Movies WHERE movie_id = :movie_id";
 $deleteStmt = $db->prepare($deleteQuery);
 $deleteStmt->execute([':movie_id' => $movie_id]);
