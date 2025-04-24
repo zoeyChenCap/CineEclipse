@@ -1,6 +1,5 @@
 <?php
 require('connect.php');
-include('header.php');
 
 // Check whether user is logged in
 $logged_in = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
@@ -39,6 +38,7 @@ $query .= " ORDER BY m.release_year DESC";
 // Prepare and execute the query
 $statement = $db->prepare($query);
 $statement->execute($params);
+
 ?>
 
 <!DOCTYPE html>
@@ -52,7 +52,7 @@ $statement->execute($params);
     <title>Home Page</title>
 </head>
 <body>
-
+<?php include('header.php'); ?>
     <!-- Search form -->
     <form method="GET" action="index.php" class="search_form" id="searchForm">
         <input type="text" name="search" placeholder="Enter movie title..." value="<?= htmlspecialchars($search_query) ?>">
@@ -80,34 +80,36 @@ $statement->execute($params);
             <?php while ($row = $statement->fetch()): ?>
                 <div class="movie_card">
                     <div class="movie_info">
-                    <a href="movie_detail.php?id=<?= htmlspecialchars($row['movie_id']) ?>" class="movie_card_link">
-                        <div class="info_with_poster">
-                            <div class="text_info">
-                                <h2><?= htmlspecialchars_decode($row['title']) ?></h2>
-                                <p><strong>Type:</strong> <?= htmlspecialchars($row['type']) ?></p>
-                                <?php
-                                $runtime = $row['runtime'];
-                                        if ($runtime >= 60) {
-                                            $hours = floor($runtime / 60);
-                                            $minutes = $runtime % 60;
-                                            $formatted_runtime = "{$hours}h {$minutes}m";
-                                        } else {
-                                            $formatted_runtime = "{$runtime}m";
-                                        }
-                                ?>
-                                <p><strong>Runtime:</strong> <?= $formatted_runtime ?></p>
-                                <p><strong>Release Year:</strong> <?= htmlspecialchars($row['release_year']) ?></p>
-                                <p><strong>Language:</strong> <?= htmlspecialchars_decode($row['language']) ?></p>
-                                <p><strong>Genre:</strong> <?= htmlspecialchars($row['genre_name']) ?></p>
+                        <a href="movie_detail.php?id=<?= htmlspecialchars($row['movie_id']) ?>" class="movie_card_link">
+                            <div class="info_with_poster">
+                                <div class="text_info">
+                                    <h2><?= htmlspecialchars_decode($row['title']) ?></h2>
+                                    <p><strong>Type:</strong> <?= htmlspecialchars($row['type']) ?></p>
+                                    <?php
+                                    $runtime = $row['runtime'];
+                                            if ($runtime >= 60) {
+                                                $hours = floor($runtime / 60);
+                                                $minutes = $runtime % 60;
+                                                $formatted_runtime = "{$hours}h {$minutes}m";
+                                            } else {
+                                                $formatted_runtime = "{$runtime}m";
+                                            }
+                                    ?>
+                                    <p><strong>Runtime:</strong> <?= $formatted_runtime ?></p>
+                                    <p><strong>Release Year:</strong> <?= htmlspecialchars($row['release_year']) ?></p>
+                                    <p><strong>Language:</strong> <?= htmlspecialchars_decode($row['language']) ?></p>
+                                    <p><strong>Genre:</strong> <?= htmlspecialchars($row['genre_name']) ?></p>
+                                </div>
+                                <?php if (!empty($row['poster_url_thumb'])): ?>
+                                <div class="poster_container">
+                                    <img src="<?= htmlspecialchars($row['poster_url_thumb']) ?>" alt="Movie Poster Thumbnail">
+                                </div>
+                                <?php endif; ?>
                             </div>
-                            <?php if (!empty($row['poster_url_thumb'])): ?>
-                            <div class="poster_container">
-                                <img src="<?= htmlspecialchars($row['poster_url_thumb']) ?>" alt="Movie Poster Thumbnail">
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                        <p><strong>TMDb Link:</strong> <a href="<?= htmlspecialchars($row['tmdb_link']) ?>" target="_blank"><?= htmlspecialchars_decode($row['tmdb_link']) ?></a></p>
-                    </a>
+                        </a>
+                        <p><strong>TMDb Link:</strong> 
+                            <a href="<?= htmlspecialchars($row['tmdb_link']) ?>" target="_blank"><?= htmlspecialchars($row['tmdb_link']) ?></a>
+                        </p>
                     </div>
                 </div>
             <?php endwhile; ?>
