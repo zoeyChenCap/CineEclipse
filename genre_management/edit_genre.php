@@ -72,37 +72,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../style.css?v=1.0">
     <title>Edit Genre</title>
 </head>
 <body>
+    <div class="container mt-4">
+        <!-- 顶部导航按钮 -->
+        <div class="d-flex justify-content-end mb-3">
+            <a href="../backstage.php" class="btn btn-secondary me-2">Return to Backstage</a>
+        </div>
 
-    <div class="log_form">
-        <h2>Edit Genre</h2>
+        <h2 class="text-center mb-4">Edit Genre</h2>
+        <p class="text-center text-muted">
+            Update the genre name below and click "Update" to save changes.
+        </p>
 
         <!-- 显示错误信息 -->
         <?php if ($error): ?> 
-            <div class='error'><?= htmlspecialchars($error) ?></div> 
+            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div> 
         <?php endif; ?>
 
         <!-- 显示成功消息 -->
         <?php if (isset($_SESSION['success_message'])): ?>
-            <div class="success"><?= htmlspecialchars($_SESSION['success_message']) ?></div>
+            <div class="alert alert-success"><?= htmlspecialchars($_SESSION['success_message']) ?></div>
             <?php unset($_SESSION['success_message']); // 显示一次后清空 ?>
         <?php endif; ?>
 
-        <form method="POST" action="edit_genre.php?genre_id=<?= htmlspecialchars($genre_id) ?>">
-            <label for="genre_name">Genre name:</label>
-            <input type="text" id="genre_name" name="genre_name" value="<?= htmlspecialchars($current_genre['genre_name']) ?>" autofocus />
+        <form method="POST" action="edit_genre.php?genre_id=<?= htmlspecialchars($genre_id) ?>" class="p-4 border rounded shadow-sm bg-light form-container">
+            <!-- Genre Name -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label for="genre_name" class="form-label">Genre Name:</label>
+                    <input type="text" id="genre_name" name="genre_name" class="form-control" value="<?= htmlspecialchars($current_genre['genre_name']) ?>" autofocus required>
+                </div>
+            </div>
 
-            <div class="double_buttons">
-                <button type="submit">Update</button>
-                <button type="button" onclick="window.location.href='../backstage.php'">Cancel</button>
+            <!-- Buttons -->
+            <div class="d-flex justify-content-end gap-2">
+                <button type="submit" class="btn btn-primary" style="width: 100px;">Update</button>
+                <button type="button" class="btn btn-secondary" style="width: 100px;" onclick="window.location.href='../backstage.php'">Cancel</button>
             </div>
         </form>
-
-        <a href="../backstage.php">Return to Backstage</a>
     </div>
-
 </body>
 </html>

@@ -104,7 +104,7 @@ $movies = $statement->fetchAll(PDO::FETCH_ASSOC);
             <div id="users" class="tab-pane fade show active">
                 <div class="tab_header">
                     <h3>User List</h3>
-                    <a href="user_management/create_user.php" class="btn btn-create-user">Create New User</a>
+                    <a href="user_management/create_user.php" class="btn btn-primary">Create New User</a>
                 </div>
 
                 <table class="table table-bordered">
@@ -140,7 +140,7 @@ $movies = $statement->fetchAll(PDO::FETCH_ASSOC);
             <div id="content" class="tab-pane fade">
                 <div class="tab_header">
                     <h3>Movie Management</h3>
-                    <a href="CRUD/add.php" class="btn btn-add-movie">Add Movie</a>
+                    <a href="CRUD/add.php" class="btn btn-primary">Add Movie</a>
                 </div>
 
                 <form class="sort_movies" id="sortMoviesForm">
@@ -169,7 +169,7 @@ $movies = $statement->fetchAll(PDO::FETCH_ASSOC);
             <div id="genres" class="tab-pane fade">
                 <div class="tab_header">
                     <h3>Genre Management</h3>
-                    <a href="genre_management/add_genre.php " class="btn btn-edit-category">Add Genre</a>
+                    <a href="genre_management/add_genre.php " class="btn btn-primary">Add Genre</a>
                 </div>
                 <table class="table table-bordered">
                     <thead class="table-dark">
