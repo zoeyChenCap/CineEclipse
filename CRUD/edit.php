@@ -190,61 +190,105 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Edit Movie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-    <h2>Edit Movie</h2>
+    <div class="container mt-4">
+        <!-- 顶部导航按钮 -->
+        <div class="d-flex justify-content-end mb-3">
+            <a href="../backstage.php" class="btn btn-secondary me-2">Return to Backstage</a>
+            <a href="../index.php" class="btn btn-secondary">Back to Movie List</a>
+        </div>
 
-    <!-- 显示错误信息 -->
-    <?php if (!empty($error)): ?>
-        <p><?= htmlspecialchars($error) ?></p>
-    <?php endif; ?>
+        <h2 class="text-center mb-4">Edit Movie</h2>
+        <p class="text-center text-muted">
+            Edit the movie information below. You can update the details or replace the poster.
+        </p>
 
-    <form action="" method="POST" enctype="multipart/form-data">
-        <label>Title:</label>
-        <input type="text" name="title" value="<?= htmlspecialchars($movie['title']) ?>" required><br>
-
-        <p>Created At: <?= htmlspecialchars($movie['created_at']) ?></p>
-
-        <label for="type">Type:</label>
-        <select name="type" id="type" required>
-            <option value="movie" <?= ($movie['type'] == 'movie') ? 'selected' : '' ?>>Movie</option>
-            <option value="series" <?= ($movie['type'] == 'series') ? 'selected' : '' ?>>TV Show</option>
-        </select><br>
-
-        <label for="runtime">Runtime (in minutes):</label>
-        <input type="number" name="runtime" value="<?= htmlspecialchars($movie['runtime']) ?>" required><br>
-
-        <label>Release Year:</label>
-        <input type="number" name="release_year" value="<?= $movie['release_year'] ?>" required min="1888" max="<?= date('Y') ?>"><br>
-
-        <label>Language:</label>
-        <input type="text" name="language" value="<?= htmlspecialchars($movie['language']) ?>" required><br>
-
-        <label>Country:</label>
-        <input type="text" name="country" value="<?= htmlspecialchars($movie['country']) ?>" required><br>
-
-        <label>Genre:</label>
-        <select name="genre_id" required>
-            <?php foreach ($genres as $genre): ?>
-                <option value="<?= $genre['genre_id'] ?>" <?= ($genre['genre_id'] == $movie['genre_id']) ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($genre['genre_name']) ?>
-                </option>
-            <?php endforeach; ?>
-        </select><br>
-
-        <label>TMDb Link:</label>
-        <input type="url" name="tmdb_link" value="<?= htmlspecialchars($movie['tmdb_link']) ?>"><br>
-
-        <label>Poster:</label>
-        <input type="file" name="poster"><br>
-        <?php if (!empty($movie['poster_url_thumb'])): ?>
-            <img src="../<?= htmlspecialchars($movie['poster_url_thumb']) ?>" alt="Movie Poster"><br>
-            <input type="checkbox" name="remove_poster" id="remove_poster">
-            <label for="remove_poster">Remove current poster</label><br>
+        <!-- 显示错误信息 -->
+        <?php if (!empty($error)): ?>
+            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
-        <button type="submit">Update Movie</button>
-    </form>
-    <a href="../index.php">Back to Home Page</a>
+        <form action="" method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm bg-light form-container">
+            <!-- Title, Type 和 Release Year -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="title" class="form-label">Title:</label>
+                    <input type="text" name="title" id="title" class="form-control" value="<?= htmlspecialchars($movie['title']) ?>" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="type" class="form-label">Type:</label>
+                    <select name="type" id="type" class="form-select" required>
+                        <option value="movie" <?= ($movie['type'] == 'movie') ? 'selected' : '' ?>>Movie</option>
+                        <option value="series" <?= ($movie['type'] == 'series') ? 'selected' : '' ?>>TV Show</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="release_year" class="form-label">Release Year:</label>
+                    <input type="number" name="release_year" id="release_year" class="form-control" value="<?= $movie['release_year'] ?>" required min="1888" max="<?= date('Y') ?>">
+                </div>
+            </div>
+
+            <!-- Runtime, Language 和 Country -->
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="runtime" class="form-label">Runtime (minutes):</label>
+                    <input type="number" name="runtime" id="runtime" class="form-control" value="<?= htmlspecialchars($movie['runtime']) ?>" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="language" class="form-label">Language:</label>
+                    <input type="text" name="language" id="language" class="form-control" value="<?= htmlspecialchars($movie['language']) ?>" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="country" class="form-label">Country:</label>
+                    <input type="text" name="country" id="country" class="form-control" value="<?= htmlspecialchars($movie['country']) ?>" required>
+                </div>
+            </div>
+
+            <!-- Genre 和 TMDb Link -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="genre_id" class="form-label">Genre:</label>
+                    <select name="genre_id" id="genre_id" class="form-select" required>
+                        <?php foreach ($genres as $genre): ?>
+                            <option value="<?= $genre['genre_id'] ?>" <?= ($genre['genre_id'] == $movie['genre_id']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($genre['genre_name']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="tmdb_link" class="form-label">TMDb Link:</label>
+                    <input type="url" name="tmdb_link" id="tmdb_link" class="form-control" value="<?= htmlspecialchars($movie['tmdb_link']) ?>">
+                </div>
+            </div>
+
+            <!-- Poster Upload 和 Remove Poster -->
+            <div class="row mb-3">
+                <div class="col-md-9 d-flex align-items-center">
+                    <label for="poster" class="form-label me-3">Poster Image:</label>
+                    <input type="file" name="poster" id="poster" class="form-control w-75" accept="image/*">
+                </div>
+                <div class="col-md-3 text-end">
+                    <button type="submit" class="btn btn-primary w-auto">Update Movie</button>
+                </div>
+            </div>
+
+            <!-- Current Poster Preview 和 Remove Option -->
+            <?php if (!empty($movie['poster_url_thumb'])): ?>
+                <div class="row mb-3">
+                    <div class="col-md-12 text-center">
+                        <img src="../<?= htmlspecialchars($movie['poster_url_thumb']) ?>" alt="Movie Poster" class="img-thumbnail mb-2">
+                        <div class="form-check d-flex align-items-center justify-content-center">
+                            <input type="checkbox" name="remove_poster" id="remove_poster" class="form-check-input me-2">
+                            <label for="remove_poster" class="form-check-label">Remove current poster</label>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </form>
+    </div>
 </body>
 </html>
