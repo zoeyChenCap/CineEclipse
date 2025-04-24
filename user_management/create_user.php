@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container mt-4">
-        <!-- 顶部导航按钮 -->
+        <!-- Top navigation button -->
         <div class="d-flex justify-content-end mb-3">
             <a href="../backstage.php" class="btn btn-secondary me-2">Return to Backstage</a>
         </div>
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Fill in the details below to create a new user account.
         </p>
 
-        <!-- 显示错误信息 -->
+        <!-- Display error message -->
         <?php if ($error): ?> 
             <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div> 
         <?php endif; ?>

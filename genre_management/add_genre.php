@@ -10,15 +10,15 @@ if ($_SESSION['role'] !== 'admin') {
 $error = '';
 $success_message = '';
 
-// 检查是否是表单提交
+// Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $genre_name = $_POST['genre_name'];
 
-    // 检查genre_name是否已经存在
+    // Check if the genre name already exists
     if (empty($genre_name)) {
         $error = "Please enter a genre name.";
     } else {
-        // 确保忽略大小写进行检查
+        // Ensure case-insensitive check
         $query = "SELECT genre_name FROM Genres WHERE LOWER(genre_name) = LOWER(:genre_name)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':genre_name', $genre_name);
@@ -28,18 +28,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($existing_genre) {
             $error = "The genre name already exists.";
         } else {
-            // 插入新类别数据
+            // Insert new genre data
             $query = "INSERT INTO Genres (genre_name) VALUES (:genre_name)";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':genre_name', $genre_name);
 
             if ($stmt->execute()) {
-                // 成功创建新类别，设置成功消息
+                // Successfully created a new genre, set success message
                 $_SESSION['success_message'] = "Genre '$genre_name' was added successfully.";
-                header('Location: add_genre.php'); // 重定向回当前页面
+                header('Location: add_genre.php'); // Redirect back to the current page
                 exit();
             } else {
-                // 插入失败
+                // Insert failed
                 $error = "Error: Could not create genre.";
             }
         }
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container mt-4">
-        <!-- 顶部导航按钮 -->
+        <!-- Top navigation button -->
         <div class="d-flex justify-content-end mb-3">
             <a href="../backstage.php" class="btn btn-secondary me-2">Return to Backstage</a>
         </div>
@@ -68,12 +68,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Add a new genre to the database by entering its name below.
         </p>
 
-        <!-- 显示错误信息 -->
+        <!-- Display error message -->
         <?php if ($error): ?> 
             <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div> 
         <?php endif; ?>
 
-        <!-- 显示成功消息 -->
+        <!-- Display success message -->
         <?php if (isset($_SESSION['success_message'])): ?>
             <div class="alert alert-success"><?= htmlspecialchars($_SESSION['success_message']) ?></div>
             <?php unset($_SESSION['success_message']); // 显示一次后清空 ?>

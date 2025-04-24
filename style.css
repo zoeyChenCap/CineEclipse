@@ -87,7 +87,7 @@ a{
     gap: 20px;
 }
 
-/* 电影标题 */
+/* Movie title */
 .movies_container h2 {
     font-size: 24px;
     font-weight: bold;
@@ -95,7 +95,7 @@ a{
     margin-bottom: 20px;
 }
 
-/* 单个电影卡片 */
+/* Single movie card */
 .movie_card {
     background: white;
     padding: 15px;
@@ -104,12 +104,12 @@ a{
     transition: transform 0.2s ease-in-out;
 }
 
-/* 卡片 hover 效果 */
+/* Card hover effect */
 .movie_card:hover {
     transform: translateY(-5px);
 }
 
-/* 电影标题 */
+/* movie title */
 .movie_card h2 {
     font-size: 20px;
     margin-bottom: 10px;
@@ -121,20 +121,20 @@ a{
     display: flex;
     flex-direction: column;
 }
-/* 让文本和海报在同一行 */
+/* Align text and poster in the same row */
 .info_with_poster {
     display: flex;
-    align-items: flex-start; /* 让文本顶部对齐 */
-    justify-content:space-between; /*保持一定间距 */
+    align-items: flex-start; /* Align text to the top */
+    justify-content:space-between; /* Maintain spacing */
 }
-/* 文本信息 */
+/* Text information */
 .text_info {
     flex: 1;
 }
 
-/* 电影海报容器 */
+/* Movie poster container */
 .poster_container {
-    flex: 0 0 110px; /* 固定宽度 */
+    flex: 0 0 110px; /* Fixed width */
     margin-left: 15px;
 }
 
@@ -145,7 +145,7 @@ a{
     border-radius: 8px;
 }
 
-/* 电影信息 */
+/* Movie information */
 .movie_card p {
     font-size: 14px;
     color: #333;
@@ -156,10 +156,6 @@ a{
 .movie_card a {
     text-decoration: none;
 }
-
-/*.movie_card a:hover {
-    text-decoration: underline;
-}*/
 
 .double_buttons {
     display: flex;  
@@ -187,23 +183,23 @@ a{
     margin-top: 1rem;
 }
 #backstage_header h2 {
-  text-align: center;   /* 标题居中 */
-  margin: 0;            /* 移除默认外边距 */
-  line-height: 1.2;     /* 避免标题高度影响布局 */
+  text-align: center;   /* Center the title */
+  margin: 0;            /* Remove default margin */
+  line-height: 1.2;     /* Avoid title height affecting layout */
 }
 
 #backstage_header a {
-  position: absolute;   /* 绝对定位到右上角 */
-  top: 0;               /* 距离顶部 0 */
-  right: 0;             /* 距离右侧 0 */
+  position: absolute;   /* Absolute positioning to the top-right corner */
+  top: 0;               /* Distance from the top 0 */
+  right: 0;             /* Distance from the right 0 */
 }
 /* Change the tab color */
 .nav-tabs .nav-link {
-    color: black; /* 未选中时的字体颜色 */
+    color: black; /* Font color when not selected */
 }
 
 .nav-tabs .nav-link.active {
-    color: #943c3c ; /* 选中时的字体颜色 */
+    color: #943c3c ; /* Font color when selected */
     font-weight: bold;
 }
 
@@ -274,7 +270,7 @@ form.sort_movies#sortMoviesForm {
 }
 .movie_details {
     display: flex;
-    flex-direction: row-reverse; /* 反转顺序使海报在右 */
+    flex-direction: row-reverse; /* Reverse order to place the poster on the right */
     gap: 20px;
 }
 .movie_poster {

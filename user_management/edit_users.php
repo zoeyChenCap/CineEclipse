@@ -7,18 +7,18 @@ if ($_SESSION['role'] !== 'admin') {
     die("Access Denied: only Admin can manage user data.");
 }
 
-// 获取用户 ID
+// Get the user ID
 if (isset($_GET['user_id'])) {
     $user_id = $_GET['user_id'];
 
-    // 获取用户信息
+    // Fetch user information
     $query = "SELECT * FROM Users WHERE user_id = :user_id";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // 如果用户不存在，则显示错误信息
+    // If the user does not exist, show an error message
     if (!$user) {
         die("User not found.");
     }
@@ -26,7 +26,7 @@ if (isset($_GET['user_id'])) {
     die("Invalid user ID.");
 }
 
-// 更新用户信息
+// Update user information
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $first_name = $_POST['first_name'];
     $last_name = $_POST['last_name'];
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 
             if ($stmt->execute()) {
-                header('Location: ../backstage.php');  // 更新成功后跳转到用户管理页面
+                header('Location: ../backstage.php');  // Redirect to the user management page after successful update
                 exit();
             } else {
                 $error = "Failed to update user.";
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <div class="container mt-4">
-        <!-- 顶部导航按钮 -->
+        <!-- Top navigation button -->
         <div class="d-flex justify-content-end mb-3">
             <a href="../backstage.php" class="btn btn-secondary me-2">Return to Backstage</a>
         </div>
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             Update the user details below and click "Update" to save changes.
         </p>
 
-        <!-- 显示错误信息 -->
+        <!-- Display error message -->
         <?php if (isset($error)): ?> 
             <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div> 
         <?php endif; ?>

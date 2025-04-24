@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $poster_url_thumb = null; // Set thumbnail image path to null
     }
 
-    // 如果有新文件上传
+    // If the admin uploaded a new poster manually
     elseif (isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK) {
         $allowed_types = ['image/jpeg', 'image/png', 'image/webp'];
         $max_size = 2 * 1024 * 1024; // Upload poster limitation is 2MB
@@ -195,7 +195,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 <div class="container mt-4">
-    <!-- 顶部导航按钮 -->
+    <!-- Top navigation button -->
     <div class="d-flex justify-content-end mb-3">
         <a href="../backstage.php" class="btn btn-secondary me-2">Return to Backstage</a>
         <a href="../index.php" class="btn btn-secondary">Back to Movie List</a>
@@ -206,13 +206,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             Edit the movie information below. You can update the details or replace the poster.
         </p>
 
-    <!-- 显示错误信息 -->
+    <!-- Display error message -->
     <?php if (!empty($error)): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
     <form action="" method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm bg-light form-container">
-        <!-- Title, Type 和 Release Year -->
+        <!-- Title, Type and Release Year -->
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="title" class="form-label">Title:</label>
@@ -231,7 +231,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
 
-        <!-- Runtime, Language 和 Country -->
+        <!-- Runtime, Language and Country -->
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="runtime" class="form-label">Runtime (minutes):</label>
@@ -247,7 +247,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
 
-            <!-- Genre 和 TMDb Link -->
+            <!-- Genre and TMDb Link -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="genre_id" class="form-label">Genre:</label>
@@ -265,7 +265,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
 
-            <!-- Poster Upload 和 Remove Poster -->
+            <!-- Poster Upload and Remove Poster -->
             <div class="row mb-3">
                 <div class="col-md-9 d-flex align-items-center">
                     <label for="poster" class="form-label me-3">Poster Image:</label>
@@ -276,7 +276,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
 
-            <!-- Current Poster Preview 和 Remove Option -->
+            <!-- Current Poster Preview and Remove Option -->
         <?php if (!empty($movie['poster_url_thumb'])): ?>
         <div class="row mb-3">
                     <div class="col-md-12 text-center">

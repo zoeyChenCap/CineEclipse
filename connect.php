@@ -2,7 +2,7 @@
 // Set the timezone of PHP to Winnnipeg local time
 date_default_timezone_set('America/Winnipeg');
 
-// 使用 defined() 检查常量是否已定义，防止重复定义
+// Use defined() to check if constants are already defined to prevent redefinition
 if (!defined('DB_DSN')) {
     define('DB_DSN', 'mysql:host=localhost;dbname=movie_cms');
 }

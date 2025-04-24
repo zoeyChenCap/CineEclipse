@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM已完全加载"); // 测试是否执行
-    // 初始化表单值
+    console.log("DOM已完全加载"); // Test if the script is executing
+    // Initialize form values
     document.getElementById("sort_column").value = "release_year";
     document.getElementById("sort_order").value = "DESC";
     
-    // 初始加载数据
+    // Initial data load
     fetchMovies('release_year', 'DESC');
     
-    // 表单提交处理
+    // Handle form submission
     document.getElementById("sortMoviesForm").addEventListener("submit", function (event) {
         event.preventDefault();
         const sortColumn = document.getElementById('sort_column').value;
@@ -59,8 +59,8 @@ if (!Array.isArray(data)) {
 }
 
 function formatRuntime(runtime) {
-    if (!runtime || isNaN(runtime)) return 'N/A';  // 防止空值或非数字
-    const minutes = Number(runtime);  // 确保 runtime 是数字
+    if (!runtime || isNaN(runtime)) return 'N/A';  // Prevent empty or non-numeric values
+    const minutes = Number(runtime);  // Ensure runtime is a number
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;

@@ -30,7 +30,7 @@ $genres = $genresStatement->fetchAll(PDO::FETCH_ASSOC);
 // Generate upload path
 function file_upload_path($original_filename, $upload_subfolder_name = 'posters', $suffix = '') {
     $current_folder = dirname(__FILE__);
-    $filename = basename(pathinfo($original_filename, PATHINFO_FILENAME)); // 使用 basename 防止目录遍历
+    $filename = basename(pathinfo($original_filename, PATHINFO_FILENAME)); // Use basename to prevent directory traversal
     $extension = pathinfo($original_filename, PATHINFO_EXTENSION);
 
     if (!empty($suffix)) {
@@ -40,7 +40,7 @@ function file_upload_path($original_filename, $upload_subfolder_name = 'posters'
     $path_segments = [$current_folder, "..", $upload_subfolder_name, $filename . '.' . $extension];
     $path = join(DIRECTORY_SEPARATOR, $path_segments);
 
-    // 确保目录存在
+    // Ensure the directory exists
     if (!is_dir(dirname($path))) {
         mkdir(dirname($path), 0755, true);
     }
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $downloaded_from_tmdb = false;
 
 if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) {
-    // 从 TMDb 下载图片
+    // Download image from TMDb
     $image_data = file_get_contents($poster_from_tmdb);
     if ($image_data === false) {
         $error = "Failed to download image from TMDb. Please check the URL.";
@@ -91,19 +91,19 @@ if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) 
             $newFileName = uniqid() . '_tmdb.' . $ext;
             $destPath = file_upload_path($newFileName, 'posters');
 
-            // 保存图片到本地
+            // Save the image locally
             file_put_contents($destPath, $image_data);
             $poster_url = "posters/" . $newFileName;
 
             try {
-                // 中图
+                // Medium size
                 $mediumPath = file_upload_path($newFileName, 'posters', '_medium');
                 $imageMedium = new ImageResize($destPath);
                 $imageMedium->resizeToWidth(400);
                 $imageMedium->save($mediumPath);
                 $poster_url_medium = "posters/" . pathinfo($newFileName, PATHINFO_FILENAME) . "_medium." . $ext;
 
-                // 缩略图
+                // Thumbnail
                 $thumbPath = file_upload_path($newFileName, 'posters', '_thumb');
                 $imageThumb = new ImageResize($destPath);
                 $imageThumb->resizeToWidth(110);
@@ -227,7 +227,7 @@ if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) 
 </head>
 <body>
 <div class="container mt-4">
-        <!-- 顶部导航按钮 -->
+        <!-- Top navigation button -->
         <div class="d-flex justify-content-end mb-3">
             <a href="../backstage.php" class="btn btn-secondary me-2">Return to Backstage</a>
             <a href="../index.php" class="btn btn-secondary">Back to Movie List</a>
@@ -238,7 +238,7 @@ if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) 
             Add a new movie by autofill via TMDb link or manually enter the information.
         </p>
         <form action="add.php" method="POST" enctype="multipart/form-data" class="p-4 border rounded shadow-sm bg-light form-container">
-<!-- TMDb Link 和 Autofill Button -->
+<!-- TMDb Link and Autofill Button -->
 <div class="row mb-3">
     <div class="col-md-12 d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center" style="width: 75%;">
@@ -249,7 +249,7 @@ if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) 
     </div>
 </div>
 
-<!-- Title, Type 和 Release Year -->
+<!-- Title, Type and Release Year -->
     <div class="row mb-3">
 <div class="col-md-4">
         <label for="title" class="form-label">Title:</label>
@@ -265,7 +265,7 @@ if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) 
     </div>
 </div>
 
-<!-- Runtime, Language 和 Country -->
+<!-- Runtime, Language and Country -->
     <div class="row mb-3">
 <div class="col-md-4">
                     <label for="runtime" class="form-label">Runtime (minutes):</label>
@@ -281,7 +281,7 @@ if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) 
     </div>
 </div>
 
-<!-- TMDb Suggested Genres 和 Genre -->
+<!-- TMDb Suggested Genres and Genre -->
     <div class="row mb-3">
                         <div class="col-md-6">
             <label>TMDb Suggested Genres:</label>
@@ -299,7 +299,7 @@ if (empty($poster_url) && !$image_upload_detected && !empty($poster_from_tmdb)) 
                 </div>
     </div>
 
-<!-- Poster Upload 和 Add Movie 按钮 -->
+<!-- Poster Upload and Add Movie button -->
 <div class="row mb-3">
     <div class="col-md-12 d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center" style="width: 75%;">

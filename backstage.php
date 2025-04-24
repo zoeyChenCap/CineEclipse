@@ -10,11 +10,11 @@ if ($_SESSION['role'] !== 'admin') {
     die("Access Denied: only Admin can manage user data.");
 }
 
-// 处理 AJAX 请求（在查询用户数据之前）
+// Handle AJAX request for sorting movies (before querying user data)
 if (isset($_GET['sort_column']) && isset($_GET['sort_order'])) {
     header('Content-Type: application/json');
 
-    // AJAX专用的排序参数处理
+    // Handle sorting parameters for AJAX
     $allowed_columns = ['title', 'release_year', 'runtime', 'created_at'];
     $allowed_orders = ['ASC', 'DESC'];
 
@@ -37,26 +37,26 @@ if (isset($_GET['sort_column']) && isset($_GET['sort_order'])) {
     $movies = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode($movies);
-    exit; // 终止脚本，不输出后续HTML
+    exit; // Terminate the script, do not output subsequent HTML
     }
 
-// 正常页面加载
+// Normal page load
 $sort_column = $_GET['sort'] ?? 'created_at';
 $sort_order = $_GET['order'] ?? 'DESC';
 
-// Obtain all users (not include admin) information (普通页面请求时才执行)
+// Obtain all users (not include admin) information (only executed for normal page requests)
 $query = "SELECT * FROM Users WHERE role = 'user' "; // Only search user accounts
 $stmt = $db->prepare($query);
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Obtain all genres from genre table (普通页面请求时才执行)
+// Obtain all genres from genre table (only executed for normal page requests)
 $query = "SELECT * FROM Genres ORDER BY genre_id ASC"; 
 $stmt = $db->prepare($query);
 $stmt->execute();
 $genres = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 获取电影数据（用于首次加载页面）
+// Obtain movie data (used for initial page load)
 $query = "SELECT m.*, g.genre_name 
           FROM Movies m
           LEFT JOIN Genres g ON m.genre_id = g.genre_id
@@ -97,7 +97,7 @@ $movies = $statement->fetchAll(PDO::FETCH_ASSOC);
             </li>
         </ul>
         
-        <!-- Tab 内容 -->
+        <!-- Tab Content -->
         <div class="tab-content mt-3">
 
             <!-- User Management -->

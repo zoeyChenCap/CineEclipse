@@ -7,17 +7,17 @@ if ($_SESSION['role'] !== 'admin') {
     die("Access Denied: only Admin can manage user data.");
 }
 
-// 获取用户 ID
+// Get the user ID
 if (isset($_GET['user_id'])) {
     $user_id = $_GET['user_id'];
 
-    // 删除用户数据
+    // Delete user information
     $query = "DELETE FROM users WHERE user_id = :user_id";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
-        header('Location: ../backstage.php');  // 删除成功后跳转回用户管理页面
+        header('Location: ../backstage.php');  // Redirect to the user management page after successful deletion
         exit();
     } else {
         die("Failed to delete user.");

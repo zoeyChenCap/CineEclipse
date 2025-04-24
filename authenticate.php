@@ -4,7 +4,7 @@ require('connect.php');
 function login($email, $password) {
     global $db;  
 
-    // 获取用户数据
+    // Retrieve user information from the database
     $query = "SELECT user_id, first_name, last_name, email, password, role FROM users WHERE email = :email";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':email', $email);
@@ -12,7 +12,7 @@ function login($email, $password) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && password_verify($password, $user['password'])) {
-        // 登录成功，设置 session
+        // Login successful, set session variables
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['fname'] = $user['first_name'];
         $_SESSION['lname'] = $user['last_name'];
