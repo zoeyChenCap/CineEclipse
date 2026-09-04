@@ -28,6 +28,10 @@ The current version is an initial prototype using a limited set of sample movie 
 - HTML, CSS, JavaScript
 - Bootstrap for styling
 
+## Screenshots
+
+<img width="3024" height="2720" alt="Project2" src="https://github.com/user-attachments/assets/31b993cd-d32e-4b5e-9830-f5e6066186a8" />
+
 ## Project Structure
 
 - `index.php` – home page and movie search
